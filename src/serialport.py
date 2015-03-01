@@ -6,22 +6,23 @@ import serial, time
 
 class SerialPort():
     def __init__(self):
-       self.baud_rate = 115200
-       
+       self.baud_rate = 9600
+
     def connect(self):
         #open connection
         self.serialport = serial.Serial("/dev/ttyAMA0", self.baud_rate, timeout=0.5)
         #Send test command
         self.serialport.write('AT\r')
         #get reply 
-        reply = self.serialport.read(50).rstrip()
-        print(reply)
+        reply = self.serialport.readlines()
+        for i in range(len(reply)):
+            reply[i] = reply[i].rstrip()
+        print reply
         #Check for good return
         if 'OK' in reply:
             print 'Connected to FONA'
         else:
             print 'Error Comunicating with FONA'
-            self.serialport.close()
 
     def transmit(self, data):
         self.serialport.write(data + '\r')
@@ -42,9 +43,12 @@ class SerialPort():
 
     def call(self):
         pass
-    
+
+    def close(self):
+        self.serialport.close()
+        
 if __name__ == '__main__':
     test = SerialPort()
     test.connect()
-    test.check()
+    #test.check()
 
