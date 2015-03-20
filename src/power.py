@@ -6,7 +6,7 @@ import time
 
 class Power():
     def __init__(self):
-        self.PWR = 18
+        self.PWR = 21
         io.setwarnings(False)
         io.setmode(io.BCM)
         io.setup(self.PWR, io.OUT)
