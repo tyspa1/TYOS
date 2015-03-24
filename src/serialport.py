@@ -34,15 +34,6 @@ class SerialPort():
     def check(self):
         self.model = self.transmit('ATI')
         print self.model
-        
-    def battery(self):
-        pass
-
-    def sms(self):
-        pass
-
-    def call(self):
-        pass
 
     def close(self):
         self.serialport.close()
