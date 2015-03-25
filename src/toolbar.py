@@ -2,14 +2,13 @@
 #copyright (c) 2015 Tyler Spadgenske
 #GPL License
 
-import serialport
+import serialport, time
 import pygame
 from pygame.locals import *
 
-#pygame.init()
-
 class Toolbar():
     def __init__(self):
+        self.UPDATE_TIME = 10
         #Setup fona
         self.fona = serialport.SerialPort()
         self.fona.connect()
@@ -22,10 +21,13 @@ class Toolbar():
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 14)
         
         #Setup Battery Persentage Text
-        self.bat_left = self.font.render('99%', True, self.BLACK, self.WHITE)
+        self.bat_left = self.font.render('..%', True, self.BLACK, self.WHITE)
         self.bat_left_rect = self.bat_left.get_rect()
         self.bat_left_rect.centerx = 285
         self.bat_left_rect.centery = 15
+
+        #Setup clock
+        self.last_update = time.time()
 
     def check_reception(self, rects):
         self.raw_reception = self.fona.transmit('AT+CSQ')
@@ -61,6 +63,8 @@ class Toolbar():
         else:
             self.bars = 0
 
+        print 'BARS:' + str(self.bars)
+        
         #Reception Bar rects      x   y  w  h
         self.one =   pygame.Rect(10, 18, 5, 7)
         self.two =   pygame.Rect(23, 13, 5, 12)
@@ -69,6 +73,7 @@ class Toolbar():
 
         self.WHITE = (255,255,255)
 
+        self.reception_bars = {'rects':[], 'colors':[]}
         #Add them to list
         if self.bars > 3:
             rects['rects'].append(self.four)
@@ -84,6 +89,7 @@ class Toolbar():
             rects['colors'].append(self.WHITE)
 
         print 'RECEPTION: ' + str(self.reception)
+
         return rects
     
     def check_battery(self, text):
@@ -115,9 +121,18 @@ class Toolbar():
         
         return text
 
-    def clock(self):
-        pass
+    def clock(self, rects, text, update):
+        if time.time() - self.last_update > self.UPDATE_TIME:
+            print 'UPDATING...'
+            self.last_update = time.time()
+            
+            rects = self.check_reception(rects)
+            text = self.check_battery(text)
+            update = True
+
+        return rects, text, update
 
 if __name__ == '__main__':
+    pygame.init()
     t = Toolbar()
-    t.check_battery(None)
+    t.clock()

@@ -55,16 +55,14 @@ class tyfone():
         #Battery Left Text
         self.bat_left = {'surface':self.toolbar.bat_left, 'rect':self.toolbar.bat_left_rect}
         
-    def home(self):
-        #TODO: Remove when toolbar.clock() is done
-        self.reception_bars = self.toolbar.check_reception(self.reception_bars)
-        self.bat_left = self.toolbar.check_battery(self.bat_left)
-        
+    def home(self):        
         while True:
             #handle events and clock
             self.handle_events()
             pygame.display.update()
             self.clock.tick()
+            #Update battery and reception
+            self.reception_bars, self.bat_left, self.update = self.toolbar.clock(self.reception_bars, self.bat_left, self.update)
 
             #Update if neccesary
             if self.update:
@@ -72,6 +70,8 @@ class tyfone():
                 self.update = False
 
     def blit(self, surfaces, rects, reception, bat):
+        self.surface.fill(self.WHITE)
+        
         #Blit all rectangles
         for rect, color in zip(rects['rects'], rects['colors']):
             pygame.draw.rect(self.surface, color, rect)
