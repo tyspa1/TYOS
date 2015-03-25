@@ -6,10 +6,26 @@ import serialport
 import pygame
 from pygame.locals import *
 
+#pygame.init()
+
 class Toolbar():
     def __init__(self):
+        #Setup fona
         self.fona = serialport.SerialPort()
         self.fona.connect()
+
+        #Define colors
+        self.WHITE = (255,255,255)
+        self.BLACK = (0,0,0)
+
+        #Setup fonts
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 14)
+        
+        #Setup Battery Persentage Text
+        self.bat_left = self.font.render('99%', True, self.BLACK, self.WHITE)
+        self.bat_left_rect = self.bat_left.get_rect()
+        self.bat_left_rect.centerx = 285
+        self.bat_left_rect.centery = 15
 
     def check_reception(self, rects):
         self.raw_reception = self.fona.transmit('AT+CSQ')
@@ -18,17 +34,17 @@ class Toolbar():
         #Remove line feeds and echo
         for i in self.raw_reception:
             if i != ' ':
-                self.raw_reception = self.raw_reception.replace(i, '')
+                self.raw_reception = self.raw_reception.replace(i, '', 1)
             else:
-                self.raw_reception = self.raw_reception.replace(i, '')
+                self.raw_reception = self.raw_reception.replace(i, '', 1)
                 break
             
         #Extract dbm
         for i in reversed(self.raw_reception):
             if i != ',':
-                self.raw_reception = self.raw_reception.replace(i, '')
+                self.raw_reception = self.raw_reception.replace(i, '', 1)
             else:
-                self.raw_reception = self.raw_reception.replace(i, '')
+                self.raw_reception = self.raw_reception.replace(i, '', 1)
                 break
             
         self.reception = int(self.raw_reception)
@@ -70,12 +86,38 @@ class Toolbar():
         print 'RECEPTION: ' + str(self.reception)
         return rects
     
-    def check_battery(self):
-        pass
+    def check_battery(self, text):
+
+        #Get battery level from fona
+        self.raw_data = self.fona.transmit('AT+CBC')
+        self.raw_data = self.raw_data[1]
+
+        #Remove line feeds and echo
+        for i in self.raw_data:
+            if i != ',':
+                self.raw_data = self.raw_data.replace(i, '', 1)
+            else:
+                break
+        
+        #Extract percentage
+        for i in reversed(self.raw_data):
+            if i != ',':
+                self.raw_data = self.raw_data.replace(i, '', 1)
+            else:
+                break
+
+        #Put percentage in text
+        self.percentage = self.raw_data.replace(',', '')   
+
+        print 'BATTERY LEVEL: ' + self.percentage + '%'
+
+        text['surface'] = self.font.render(self.percentage + '%', True, self.BLACK, self.WHITE)
+        
+        return text
 
     def clock(self):
         pass
 
 if __name__ == '__main__':
     t = Toolbar()
-    t.check_reception()
+    t.check_battery(None)

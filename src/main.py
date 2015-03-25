@@ -37,17 +37,28 @@ class tyfone():
         self.logo_rect.y = self.surface.get_rect().centery - 50
         self.logo_rect.centerx = self.surface.get_rect().centerx
 
+        #Setup Battery Icon
+        self.bat = pygame.image.load('/home/pi/tyos/graphics/bat.png')
+        self.bat_rect = self.bat.get_rect()
+        self.bat_rect.centery = 15
+        self.bat_rect.right = self.WINDOWWIDTH - 10
+
         #Setup App Toolbar
         self.app_toolbar = pygame.Rect(0, 0, 320, 30)
 
         #Image Dictionary
-        self.images = {'surfaces':[self.logo], 'rects':[self.logo_rect]}
+        self.images = {'surfaces':[self.logo, self.bat], 'rects':[self.logo_rect, self.bat_rect]}
         #Rectangle Dictionary
         self.rectangles = {'rects':[self.app_toolbar], 'colors':[self.BLACK]}
+        #Reception Rectangle dictionary
+        self.reception_bars = {'rects':[], 'colors':[]}
+        #Battery Left Text
+        self.bat_left = {'surface':self.toolbar.bat_left, 'rect':self.toolbar.bat_left_rect}
         
     def home(self):
         #TODO: Remove when toolbar.clock() is done
-        self.rectangles = self.toolbar.check_reception(self.rectangles)
+        self.reception_bars = self.toolbar.check_reception(self.reception_bars)
+        self.bat_left = self.toolbar.check_battery(self.bat_left)
         
         while True:
             #handle events and clock
@@ -57,18 +68,24 @@ class tyfone():
 
             #Update if neccesary
             if self.update:
-                self.blit(self.images['surfaces'], self.images['rects'], self.rectangles['rects'], self.rectangles['colors'])
+                self.blit(self.images, self.rectangles, self.reception_bars, self.bat_left)
                 self.update = False
 
-    def blit(self, surfaces, sur_rects, rects, colors):
+    def blit(self, surfaces, rects, reception, bat):
+        #Blit all rectangles
+        for rect, color in zip(rects['rects'], rects['colors']):
+            pygame.draw.rect(self.surface, color, rect)
+
+        #Blit all reception bars
+        for rect, color in zip(reception['rects'], reception['colors']):
+            pygame.draw.rect(self.surface, color, rect)
+
         #Blit all images
-        for surface, rect in zip(surfaces, sur_rects):
+        for surface, rect in zip(surfaces['surfaces'], surfaces['rects']):
             self.surface.blit(surface, rect)
 
-        #Blit all rectangles
-        for rect, color in zip(rects, colors):
-            pygame.draw.rect(self.surface, color, rect)
-            
+        #Blit battery Percentage
+        self.surface.blit(bat['surface'], bat['rect'])
 
     def handle_events(self):
         for event in pygame.event.get():
