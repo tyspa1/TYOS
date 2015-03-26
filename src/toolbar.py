@@ -73,7 +73,7 @@ class Toolbar():
 
         self.WHITE = (255,255,255)
 
-        self.reception_bars = {'rects':[], 'colors':[]}
+        rects = {'rects':[], 'colors':[]}
         #Add them to list
         if self.bars > 3:
             rects['rects'].append(self.four)
