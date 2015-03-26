@@ -3,7 +3,7 @@
 #GPL License
 VERSION = '0.1.0'
 
-import pygame, sys, os
+import pygame, sys, os, time, datetime
 from pygame.locals import *
 import framebuffer, toolbar
 
@@ -54,10 +54,25 @@ class tyfone():
         self.reception_bars = {'rects':[], 'colors':[]}
         #Battery Left Text
         self.bat_left = {'surface':self.toolbar.bat_left, 'rect':self.toolbar.bat_left_rect}
+
+        #Setup fonts
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
+
+        #Setup clock Text
+        self.clock_text = self.font.render('12:00', True, self.WHITE, self.BLACK)
+        self.clock_text_rect = self.clock_text.get_rect()
+        self.clock_text_rect.centerx = self.surface.get_rect().centerx
+        self.clock_text_rect.centery = 15
+
+    def blit_time(self):
+        t = datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M')
+        self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
+        self.surface.blit(self.clock_text, self.clock_text_rect)
         
     def home(self):        
         while True:
             #handle events and clock
+            self.blit_time()
             self.handle_events()
             pygame.display.update()
             self.clock.tick()

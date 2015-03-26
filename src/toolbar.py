@@ -2,13 +2,13 @@
 #copyright (c) 2015 Tyler Spadgenske
 #GPL License
 
-import serialport, time
+import serialport, time, os
 import pygame
 from pygame.locals import *
 
 class Toolbar():
     def __init__(self):
-        self.UPDATE_TIME = 10
+        self.UPDATE_TIME = 30
         #Setup fona
         self.fona = serialport.SerialPort()
         self.fona.connect()
@@ -26,8 +26,43 @@ class Toolbar():
         self.bat_left_rect.centerx = 285
         self.bat_left_rect.centery = 15
 
-        #Setup clock
+        #Setup reception/battery clock
         self.last_update = time.time()
+
+        #Set the Pi clock to the Fona RTC
+        self.rtc()
+
+    def rtc(self):
+        self.rtc_time = self.fona.transmit('AT+CCLK?')
+        self.rtc_time = self.rtc_time[1]
+
+        #Remove line feeds and echo
+        for i in self.rtc_time:
+            if i != ',':
+                self.rtc_time = self.rtc_time.replace(i, '', 1)
+            else:
+                break
+
+        #Flip string
+        self.rtc_time = self.rtc_time[::-1]
+
+        #Extract time
+        for i in self.rtc_time:
+            if i != '-':
+                self.rtc_time = self.rtc_time.replace(i, '', 1)
+            else:
+                break
+
+        #Remove comma 
+        self.rtc_time = self.rtc_time.replace(',', '', 1)
+        self.rtc_time = self.rtc_time.replace('-', '', 1)
+
+        #Flip string
+        self.rtc_time = self.rtc_time[::-1]
+        print 'RTC TIME: ' + self.rtc_time
+
+        #Set Overall Time
+        os.system('sudo date +%T -s "' + self.rtc_time + '"')
 
     def check_reception(self, rects):
         self.raw_reception = self.fona.transmit('AT+CSQ')
@@ -135,4 +170,4 @@ class Toolbar():
 if __name__ == '__main__':
     pygame.init()
     t = Toolbar()
-    t.clock()
+    t.blit_time()
