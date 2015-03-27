@@ -12,7 +12,31 @@ class App():
         self.SPEED = 2
         self.opened = False
         self.close_apps = False
+        self.get_app_order()
+        self.load_logos()
+        print self.logos
+        print len(self.logos['surfaces'])
 
+    def load_logos(self):
+        #Load the first four app's logo
+        logos = {'surfaces':[], 'rects':[]}
+        for i in range(0, 4):
+            logos['surfaces'].append(pygame.image.load('/home/pi/tyos/apps/' + self.app_order[i] + '/' + self.app_order[i] + '.png'))
+            logos['rects'].append(logos['surfaces'][i].get_rect())
+
+        self.logos = logos
+            
+        
+    def get_app_order(self):
+        #Get the order of the apps to be blitted
+        order_file = open('/home/pi/tyos/apps/order.txt', 'r')
+        order = order_file.readlines()
+
+        for i in range(0, len(order)):
+            order[i] = order[i].rstrip()
+
+        self.app_order = order
+        
     def check(self, event):
         if event.type == MOUSEBUTTONDOWN:
             if event.pos[1] < 31 and self.opened == False:
@@ -66,3 +90,7 @@ class App():
                 update = False
 
         return update, surfaces, rects, reception, bat
+
+if __name__ == '__main__':
+    t = App()
+    t.get_app_order()

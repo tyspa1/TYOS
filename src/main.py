@@ -7,19 +7,28 @@ import pygame, sys, os, time, datetime
 from pygame.locals import *
 import framebuffer, toolbar, apps
 
+import imp
+
 class tyfone():
     def __init__(self):
         self.VERSION = VERSION
 
+        #Setup some important objects
         self.scope = framebuffer.pyscope()
         self.toolbar = toolbar.Toolbar()
         self.apps = apps.App()
+
+        #Import stock apps
+        self.call_module = imp.load_source('run_app.Run', '/home/pi/tyos/apps/call/run_app.py')
+        self.call = self.call_module.Run()
+        self.call.test()
+
         
         pygame.init()
 
+        #Setup surface
         self.WINDOWWIDTH = 320
         self.WINDOWHIEGHT = 480
-
         self.surface = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHIEGHT), pygame.FULLSCREEN)
 
         self.clock = pygame.time.Clock()
@@ -68,6 +77,7 @@ class tyfone():
         self.images = {'surfaces':[self.bat], 'rects':[self.bat_rect, self.clock_text_rect]}
         
     def blit_time(self):
+        #Convert to 12 hour time then blit it to surface
         t = time.strftime("%I:%M").lstrip('0')
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
         self.surface.blit(self.clock_text, self.images['rects'][1])
