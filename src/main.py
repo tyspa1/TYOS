@@ -65,7 +65,7 @@ class tyfone():
         self.clock_text_rect.centery = 15
 
     def blit_time(self):
-        t = datetime.datetime.fromtimestamp(time.time()).strftime('%H:%M')
+        t = time.strftime("%I:%M").lstrip('0')
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
         self.surface.blit(self.clock_text, self.clock_text_rect)
         

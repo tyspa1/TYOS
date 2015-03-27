@@ -97,8 +97,6 @@ class Toolbar():
             self.bars = 1
         else:
             self.bars = 0
-
-        print 'BARS:' + str(self.bars)
         
         #Reception Bar rects      x   y  w  h
         self.one =   pygame.Rect(10, 18, 5, 7)
