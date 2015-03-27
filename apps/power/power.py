@@ -10,4 +10,4 @@ class Run():
         pass
 
     def test(self):
-        pass
+        print 'power'

@@ -18,11 +18,6 @@ class tyos():
         self.toolbar = toolbar.Toolbar()
         self.apps = apps.App()
 
-        #Import stock apps
-        self.call_module = imp.load_source('run_app.Run', '/home/pi/tyos/apps/call/run_app.py')
-        self.call = self.call_module.Run()
-        self.call.test()
-
         pygame.init()
 
         #Setup surface
@@ -98,6 +93,9 @@ class tyos():
             self.update, self.images, self.rectangles, self.reception_bars, self.bat_left = self.apps.open(self.update, self.images,
                                                                                               self.rectangles, self.reception_bars,
                                                                                               self.bat_left)
+            #Open app if tapped
+            self.apps.open_app()
+            
             #Update if necessary
             if self.update:
                 self.blit(self.images, self.rectangles, self.reception_bars, self.bat_left)

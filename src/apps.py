@@ -4,6 +4,7 @@
 
 import pygame
 from pygame.locals import *
+import imp
 
 class App():
     def __init__(self):
@@ -13,11 +14,27 @@ class App():
         self.SPEED = 2
         self.opened = False
         self.close_apps = False
-        self.app_to_open = 0
+        self.app_to_open = None
         
         #Setup default apps
         self.get_app_order()
         self.load_logos()
+        self.import_app()
+
+    def import_app(self):
+        #Import stock apps
+        loaded = []
+        self.app_objects = []
+        #Load modules
+        for i in self.app_order:
+            loaded.append(imp.load_source(i + '.Run', '/home/pi/tyos/apps/' + i +'/' + i + '.py'))
+        #Load objects
+        for i in loaded:
+            self.app_objects.append(i.Run())
+    
+    def open_app(self):
+        if self.app_to_open != None:
+            self.app_objects[self.app_to_open].test() #TODO: Call real app, not test()
 
     def load_logos(self):
         #Load the first four app's logo
@@ -57,15 +74,13 @@ class App():
             #Check for touch to open an app
             if self.opened and self.logos['rects'][0].centery == 50:
                 if event.pos[0] < 80 and event.pos[1] < 100:
-                    self.app_to_open = 1
+                    self.app_to_open = 0
                 if event.pos[0] < 160 and event.pos[0] > 80 and event.pos[1] < 100:
-                    self.app_to_open = 2
+                    self.app_to_open = 1
                 if event.pos[0] < 240 and event.pos[0] > 160 and event.pos[1] < 100:
-                    self.app_to_open = 3
+                    self.app_to_open = 2
                 if event.pos[0] < 320 and event.pos[0] > 240 and event.pos[1] < 100:
-                    self.app_to_open = 4
-
-                print self.app_to_open
+                    self.app_to_open = 3
                 
         return self.open_apps
 
@@ -116,4 +131,3 @@ class App():
 
 if __name__ == '__main__':
     t = App()
-    t.get_app_order()
