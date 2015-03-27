@@ -5,7 +5,7 @@ VERSION = '0.1.0'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
-import framebuffer, toolbar
+import framebuffer, toolbar, apps
 
 class tyfone():
     def __init__(self):
@@ -13,6 +13,8 @@ class tyfone():
 
         self.scope = framebuffer.pyscope()
         self.toolbar = toolbar.Toolbar()
+        self.apps = apps.App()
+        
         pygame.init()
 
         self.WINDOWWIDTH = 320
@@ -46,14 +48,12 @@ class tyfone():
         #Setup App Toolbar
         self.app_toolbar = pygame.Rect(0, 0, 320, 30)
 
-        #Image Dictionary
-        self.images = {'surfaces':[self.logo, self.bat], 'rects':[self.logo_rect, self.bat_rect]}
         #Rectangle Dictionary
         self.rectangles = {'rects':[self.app_toolbar], 'colors':[self.BLACK]}
         #Reception Rectangle dictionary
         self.reception_bars = {'rects':[], 'colors':[]}
         #Battery Left Text
-        self.bat_left = {'surface':self.toolbar.bat_left, 'rect':self.toolbar.bat_left_rect}
+        self.bat_left = {'surface':self.toolbar.bat_left, 'rects':self.toolbar.bat_left_rect}
 
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
@@ -64,12 +64,15 @@ class tyfone():
         self.clock_text_rect.centerx = self.surface.get_rect().centerx
         self.clock_text_rect.centery = 15
 
+        #Image Dictionary
+        self.images = {'surfaces':[self.bat], 'rects':[self.bat_rect, self.clock_text_rect]}
+        
     def blit_time(self):
         t = time.strftime("%I:%M").lstrip('0')
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
-        self.surface.blit(self.clock_text, self.clock_text_rect)
+        self.surface.blit(self.clock_text, self.images['rects'][1])
         
-    def home(self):        
+    def home(self):
         while True:
             #handle events and clock
             self.blit_time()
@@ -77,8 +80,12 @@ class tyfone():
             pygame.display.update()
             self.clock.tick()
             #Update battery and reception
-            self.reception_bars, self.bat_left, self.update = self.toolbar.clock(self.reception_bars, self.bat_left, self.update)
-
+            self.reception_bars, self.bat_left, self.update = self.toolbar.clock(self.reception_bars, self.bat_left,
+                                                                                 self.update, self.apps.pixel)
+            #Move images if necessary
+            self.update, self.images, self.rectangles, self.reception_bars, self.bat_left = self.apps.open(self.update, self.images,
+                                                                                              self.rectangles, self.reception_bars,
+                                                                                              self.bat_left)
             #Update if neccesary
             if self.update:
                 self.blit(self.images, self.rectangles, self.reception_bars, self.bat_left)
@@ -100,14 +107,14 @@ class tyfone():
             self.surface.blit(surface, rect)
 
         #Blit battery Percentage
-        self.surface.blit(bat['surface'], bat['rect'])
+        self.surface.blit(bat['surface'], bat['rects'])
+        #Blit logo
+        self.surface.blit(self.logo, self.logo_rect)
 
     def handle_events(self):
         for event in pygame.event.get():
             self.update = True
-            if event.type == MOUSEBUTTONDOWN:
-                pass
-                
+            self.app_bar = self.apps.check(event)
                 
 tyos = tyfone()
 try:

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#TYOS Serial Interface with Fona and RTC
+#TYOS Serial Interface with Fona
 #copyright (c) 2015 Tyler Spadgenske
 
 import serial, time
@@ -17,7 +17,7 @@ class SerialPort():
         reply = self.serialport.readlines()
         for i in range(len(reply)):
             reply[i] = reply[i].rstrip()
-        print reply
+
         #Check for good return
         if 'OK' in reply:
             print 'Connected to FONA'

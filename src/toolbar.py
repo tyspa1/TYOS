@@ -59,12 +59,12 @@ class Toolbar():
 
         #Flip string
         self.rtc_time = self.rtc_time[::-1]
-        print 'RTC TIME: ' + self.rtc_time
+        print 'RTC TIME:'
 
         #Set Overall Time
         os.system('sudo date +%T -s "' + self.rtc_time + '"')
 
-    def check_reception(self, rects):
+    def check_reception(self, rects, y):
         self.raw_reception = self.fona.transmit('AT+CSQ')
         self.raw_reception = self.raw_reception[1]
 
@@ -99,10 +99,10 @@ class Toolbar():
             self.bars = 0
         
         #Reception Bar rects      x   y  w  h
-        self.one =   pygame.Rect(10, 18, 5, 7)
-        self.two =   pygame.Rect(23, 13, 5, 12)
-        self.three = pygame.Rect(38,  8, 5, 17)
-        self.four =  pygame.Rect(53,  3, 5, 22)
+        self.one =   pygame.Rect(10, y + 18, 5, 7)
+        self.two =   pygame.Rect(23, y + 13, 5, 12)
+        self.three = pygame.Rect(38,  y + 8, 5, 17)
+        self.four =  pygame.Rect(53,  y + 3, 5, 22)
 
         self.WHITE = (255,255,255)
 
@@ -121,7 +121,7 @@ class Toolbar():
             rects['rects'].append(self.one)
             rects['colors'].append(self.WHITE)
 
-        print 'RECEPTION: ' + str(self.reception)
+        print 'RECEPTION: ' + str(self.reception) + 'dbm'
 
         return rects
     
@@ -154,12 +154,12 @@ class Toolbar():
         
         return text
 
-    def clock(self, rects, text, update):
+    def clock(self, rects, text, update, y):
         if time.time() - self.last_update > self.UPDATE_TIME:
             print 'UPDATING...'
             self.last_update = time.time()
             
-            rects = self.check_reception(rects)
+            rects = self.check_reception(rects, y)
             text = self.check_battery(text)
             update = True
 
