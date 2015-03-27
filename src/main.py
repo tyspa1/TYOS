@@ -9,7 +9,7 @@ import framebuffer, toolbar, apps
 
 import imp
 
-class tyfone():
+class tyos():
     def __init__(self):
         self.VERSION = VERSION
 
@@ -23,7 +23,6 @@ class tyfone():
         self.call = self.call_module.Run()
         self.call.test()
 
-        
         pygame.init()
 
         #Setup surface
@@ -78,7 +77,10 @@ class tyfone():
         
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
-        t = time.strftime("%I:%M").lstrip('0')
+        t = time.strftime("%H:%M").lstrip('0')
+        if int(t[0] + t[1]) > 13:
+            t = str(int(t[0] + t[1]) - 12) + t[-3:]
+            
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
         self.surface.blit(self.clock_text, self.images['rects'][1])
         
@@ -96,7 +98,7 @@ class tyfone():
             self.update, self.images, self.rectangles, self.reception_bars, self.bat_left = self.apps.open(self.update, self.images,
                                                                                               self.rectangles, self.reception_bars,
                                                                                               self.bat_left)
-            #Update if neccesary
+            #Update if necessary
             if self.update:
                 self.blit(self.images, self.rectangles, self.reception_bars, self.bat_left)
                 self.update = False
@@ -118,20 +120,25 @@ class tyfone():
 
         #Blit battery Percentage
         self.surface.blit(bat['surface'], bat['rects'])
+        
         #Blit logo
         self.surface.blit(self.logo, self.logo_rect)
+
+        if self.apps.logos['rects'][0].y != -50:
+            for surface, rect in zip(self.apps.logos['surfaces'], self.apps.logos['rects']):
+                self.surface.blit(surface, rect)
 
     def handle_events(self):
         for event in pygame.event.get():
             self.update = True
             self.app_bar = self.apps.check(event)
                 
-tyos = tyfone()
+phone = tyos()
 try:
-    tyos.home()
+    phone.home()
     
 except KeyboardInterrupt:
     print
-    print 'Closing TYOS ' + tyos.VERSION
+    print 'Closing TYOS ' + phone.VERSION
     pygame.quit()
     sys.exit()
