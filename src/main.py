@@ -69,6 +69,8 @@ class tyos():
 
         #Image Dictionary
         self.images = {'surfaces':[self.bat], 'rects':[self.bat_rect, self.clock_text_rect]}
+
+        self.blit_logo = True
         
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
@@ -103,6 +105,12 @@ class tyos():
 
     def blit(self, surfaces, rects, reception, bat):
         self.surface.fill(self.WHITE)
+
+        #Blit app stuff
+        if self.apps.app_to_open != None:
+            self.blit_logo = False
+            for i in self.apps.app_objects[self.apps.app_to_open].blit['rects']:
+                self.surface.blit(self.apps.app_objects[self.apps.app_to_open].blit['surface'], i)
         
         #Blit all rectangles
         for rect, color in zip(rects['rects'], rects['colors']):
@@ -120,7 +128,8 @@ class tyos():
         self.surface.blit(bat['surface'], bat['rects'])
         
         #Blit logo
-        self.surface.blit(self.logo, self.logo_rect)
+        if self.blit_logo:
+            self.surface.blit(self.logo, self.logo_rect)
 
         if self.apps.logos['rects'][0].y != -50:
             for surface, rect in zip(self.apps.logos['surfaces'], self.apps.logos['rects']):
