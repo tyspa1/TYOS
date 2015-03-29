@@ -7,8 +7,6 @@ import pygame, sys, os, time, datetime
 from pygame.locals import *
 import framebuffer, toolbar, apps
 
-import imp
-
 class tyos():
     def __init__(self):
         self.VERSION = VERSION
@@ -102,16 +100,20 @@ class tyos():
             if self.update:
                 self.blit(self.images, self.rectangles, self.reception_bars, self.bat_left)
                 self.update = False
-
+                    
     def blit(self, surfaces, rects, reception, bat):
         self.surface.fill(self.WHITE)
 
-        #Blit app stuff
         if self.apps.app_to_open != None:
             self.blit_logo = False
-            for i in self.apps.app_objects[self.apps.app_to_open].blit['rects']:
-                self.surface.blit(self.apps.app_objects[self.apps.app_to_open].blit['surface'], i)
-        
+            #Blit images using one image but different rectangles
+            for i in self.apps.app_objects[self.apps.app_to_open].blit_one_surface['rects']:
+                self.surface.blit(self.apps.app_objects[self.apps.app_to_open].blit_one_surface['surface'], i)
+            #Blit images using multiple images and rectangles
+            for rect, surface in zip(self.apps.app_objects[self.apps.app_to_open].blit['rects'],
+                                        self.apps.app_objects[self.apps.app_to_open].blit['surfaces']):
+                self.surface.blit(surface, rect)
+                
         #Blit all rectangles
         for rect, color in zip(rects['rects'], rects['colors']):
             pygame.draw.rect(self.surface, color, rect)
@@ -138,6 +140,7 @@ class tyos():
     def handle_events(self):
         for event in pygame.event.get():
             self.update = True
+            self.apps.update_app = True
             self.app_bar = self.apps.check(event)
                 
 phone = tyos()
