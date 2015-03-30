@@ -36,7 +36,7 @@ class App():
     def open_app(self):
         if self.app_to_open != None:
             self.blit_logo = False
-            self.app_objects[self.app_to_open].test() #TODO: Call real app, not test()
+            self.app_objects[self.app_to_open].run_app() #TODO: Call real app, not test()
             if self.app_objects[self.app_to_open].exit:
                 self.app_objects[self.app_to_open].exit = False
                 self.app_to_open = None

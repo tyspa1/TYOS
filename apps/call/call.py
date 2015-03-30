@@ -158,5 +158,5 @@ class Run():
                 self.exit = True
                 self.first_call = True
     
-    def test(self):
+    def run_app(self):
         self.call_person()

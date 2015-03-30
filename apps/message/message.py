@@ -9,5 +9,5 @@ class Run():
     def __init__(self, fona):
         pass
 
-    def test(self):
+    def run_app(self):
         print 'message'

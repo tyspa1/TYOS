@@ -14,6 +14,8 @@ class tyos():
         #Setup fona
         self.fona = serialport.SerialPort()
         self.fona.connect()
+        #Set audio in/out to speaker and microphone
+        self.fona.transmit('AT+CHFA=1')
         
         #Setup some important objects
         self.scope = framebuffer.pyscope()

@@ -5,9 +5,21 @@
 #To be packaged with stock TYOS
 ###############################
 
+from subprocess import Popen
+import sys
+import pygame
+
 class Run():
     def __init__(self, fona):
-        pass
+        #Stuff to follow app protocol
+        self.exit = False
+        self.blit_one_surface = {'surface':[], 'rects':[]}
+        self.blit = {'surfaces':[], 'rects':[]}
 
-    def test(self):
-        print 'camera'
+    def run_app(self):
+        cam = Popen(['sudo', 'python', '/home/pi/tyos/adafruit-pi-cam-master/cam.py'])
+        pygame.quit()
+        sys.exit()
+        
+    def get_events(self, event):
+        pass

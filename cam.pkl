@@ -1,0 +1,14 @@
+(dp1
+S'fx'
+p2
+I5
+sS'iso'
+p3
+I0
+sS'store'
+p4
+I0
+sS'size'
+p5
+I0
+s.
