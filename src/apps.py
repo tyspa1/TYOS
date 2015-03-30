@@ -1,6 +1,6 @@
 #apps.py
 #Copyright (c) 2015 Tyler Spadgenske
-#GPL License
+#MIT License
 
 import pygame
 from pygame.locals import *
@@ -61,6 +61,9 @@ class App():
         
     def check(self, event):
         if event.type == MOUSEBUTTONDOWN:
+            #Check for events inside of app
+            if self.app_to_open != None:
+                self.app_objects[self.app_to_open].get_events(event)
             #Check for touch to open apps bar
             if event.pos[1] < 31 and self.opened == False:
                 self.open_apps = True

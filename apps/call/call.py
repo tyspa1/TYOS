@@ -6,10 +6,12 @@
 ###############################
 
 import pygame
+from pygame.locals import *
 
 class Run():
     def __init__(self):
         self.circles = []
+        self.call_number = ''
 
         #Load images
         self.circle_image = pygame.image.load('/home/pi/tyos/apps/call/circle.png')
@@ -21,6 +23,7 @@ class Run():
         #Setup colors
         self.RED = (170,0,0)
         self.WHITE = (255,255,255)
+        self.BLACK = (0,0,0)
         
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 48)
@@ -28,6 +31,9 @@ class Run():
         #Setup numbers Text
         self.number = self.font.render('1', True, self.RED, self.WHITE)
         self.number_rect = self.number.get_rect()
+
+        self.call_number_text = self.font.render('7633070284', True, self.BLACK, self.WHITE)
+        self.call_number_rect = self.call_number_text.get_rect()
         
         num = 0
         x = 35
@@ -69,9 +75,49 @@ class Run():
         self.numbers['rects'].append(self.back_image.get_rect())
         self.numbers['rects'][num].x = x
         self.numbers['rects'][num].y = y
-                
+
+        #Setup live feedback for number to be called
+        self.numbers['surfaces'].append(self.call_number_text)
+        self.numbers['rects'].append(self.call_number_rect)
+        self.numbers['rects'][-1].x = 30
+        self.numbers['rects'][-1].centery = 65
+        
         self.blit_one_surface = {'surface':self.circle_image, 'rects':self.circles}
         self.blit = self.numbers
-        
+
+    def get_events(self, event):
+        if event.pos[0] > 35 and event.pos[0] < 105:
+            if event.pos[1] > 120 and event.pos[1] < 190:
+                print '1'
+            if event.pos[1] > 210 and event.pos[1] < 280:
+                print '4'
+            if event.pos[1] > 300 and event.pos[1] < 370:
+                print '7'
+            if event.pos[1] > 390 and event.pos[1] < 460:
+                print '0'
+                
+        if event.pos[0] > 140 and event.pos[0] < 210:
+            if event.pos[1] > 120 and event.pos[1] < 190:
+                print '2'
+            if event.pos[1] > 210 and event.pos[1] < 280:
+                print '5'
+            if event.pos[1] > 300 and event.pos[1] < 370:
+                print '8'
+            if event.pos[1] > 390 and event.pos[1] < 460:
+                print 'call'
+
+        if event.pos[0] > 210 and event.pos[0] < 280:
+            if event.pos[1] > 120 and event.pos[1] < 190:
+                print '3'
+            if event.pos[1] > 210 and event.pos[1] < 280:
+                print '6'
+            if event.pos[1] > 300 and event.pos[1] < 370:
+                print '9'
+            if event.pos[1] > 390 and event.pos[1] < 460:
+                print 'back'
+
+    def call(self):
+        pass
+    
     def test(self):
         pass
