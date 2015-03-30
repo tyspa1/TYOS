@@ -7,7 +7,8 @@ from pygame.locals import *
 import imp
 
 class App():
-    def __init__(self):
+    def __init__(self, fona):
+        self.fona = fona
         #Important Variables and constants
         self.open_apps = False
         self.pixel = 0
@@ -15,7 +16,7 @@ class App():
         self.opened = False
         self.close_apps = False
         self.app_to_open = None
-        
+        self.blit_logo = True
         #Setup default apps
         self.get_app_order()
         self.load_logos()
@@ -30,12 +31,17 @@ class App():
             loaded.append(imp.load_source(i + '.Run', '/home/pi/tyos/apps/' + i +'/' + i + '.py'))
         #Load objects
         for i in loaded:
-            self.app_objects.append(i.Run())
+            self.app_objects.append(i.Run(self.fona))
     
     def open_app(self):
         if self.app_to_open != None:
+            self.blit_logo = False
             self.app_objects[self.app_to_open].test() #TODO: Call real app, not test()
-
+            if self.app_objects[self.app_to_open].exit:
+                self.app_objects[self.app_to_open].exit = False
+                self.app_to_open = None
+                self.blit_logo = True
+            
     def load_logos(self):
         #Load the first four app's logo
         logos = {'surfaces':[], 'rects':[]}

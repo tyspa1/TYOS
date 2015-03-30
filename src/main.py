@@ -5,16 +5,20 @@ VERSION = '0.1.0'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
-import framebuffer, toolbar, apps
+import framebuffer, toolbar, apps, serialport
 
 class tyos():
     def __init__(self):
         self.VERSION = VERSION
 
+        #Setup fona
+        self.fona = serialport.SerialPort()
+        self.fona.connect()
+        
         #Setup some important objects
         self.scope = framebuffer.pyscope()
-        self.toolbar = toolbar.Toolbar()
-        self.apps = apps.App()
+        self.toolbar = toolbar.Toolbar(self.fona)
+        self.apps = apps.App(self.fona)
 
         pygame.init()
 
@@ -73,7 +77,7 @@ class tyos():
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
         t = time.strftime("%H:%M").lstrip('0')
-        if int(t[0] + t[1]) > 13:
+        if int(t[0] + t[1]) > 12:
             t = str(int(t[0] + t[1]) - 12) + t[-3:]
             
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
@@ -130,7 +134,7 @@ class tyos():
         self.surface.blit(bat['surface'], bat['rects'])
         
         #Blit logo
-        if self.blit_logo:
+        if self.apps.blit_logo:
             self.surface.blit(self.logo, self.logo_rect)
 
         if self.apps.logos['rects'][0].y != -50:

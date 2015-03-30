@@ -6,7 +6,7 @@
 ###############################
 
 class Run():
-    def __init__(self):
+    def __init__(self, fona):
         pass
 
     def test(self):

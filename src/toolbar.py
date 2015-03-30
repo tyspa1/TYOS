@@ -2,16 +2,15 @@
 #copyright (c) 2015 Tyler Spadgenske
 #GPL License
 
-import serialport, time, os
+import time, os
 import pygame
 from pygame.locals import *
 
 class Toolbar():
-    def __init__(self):
+    def __init__(self, fona):
         self.UPDATE_TIME = 30
         #Setup fona
-        self.fona = serialport.SerialPort()
-        self.fona.connect()
+        self.fona = fona
 
         #Define colors
         self.WHITE = (255,255,255)
