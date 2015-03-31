@@ -1,15 +1,17 @@
 #Main.py
 #Copyright (c) 2015 Tyler Spadgenske
-#GPL License
+#MIT License
 VERSION = '0.1.0'
 
-import pygame, sys, os, time, datetime
+import pygame, sys, os, time, datetime, power
 from pygame.locals import *
 import framebuffer, toolbar, apps, serialport
 
 class tyos():
     def __init__(self):
         self.VERSION = VERSION
+        power.Power().toggle()
+        time.sleep(5)
 
         #Setup fona
         self.fona = serialport.SerialPort()

@@ -5,6 +5,9 @@
 #To be packaged with stock TYOS
 ###############################
 
+import os, time, sys, pygame
+from subprocess import Popen
+
 class Run():
     def __init__(self, fona):
         #Stuff to follow app protocol
@@ -13,7 +16,11 @@ class Run():
         self.blit = {'surfaces':[], 'rects':[]}
 
     def run_app(self):
-        pass
+        os.system('sudo python /home/pi/tyos/src/power.py') #Power off fona
+        pygame.quit()
+        time.sleep(1)
+        #a = Popen(['sudo', 'halt']) #Power down Raspberry Pi
+        sys.exit()
 
     def get_events(self, event):
         pass
