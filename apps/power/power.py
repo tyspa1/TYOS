@@ -7,7 +7,13 @@
 
 class Run():
     def __init__(self, fona):
-        pass
+        #Stuff to follow app protocol
+        self.exit = False
+        self.blit_one_surface = {'surface':[], 'rects':[]}
+        self.blit = {'surfaces':[], 'rects':[]}
 
     def run_app(self):
-        print 'power'
+        pass
+
+    def get_events(self, event):
+        pass

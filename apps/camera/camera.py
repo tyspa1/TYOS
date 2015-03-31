@@ -17,7 +17,7 @@ class Run():
         self.blit = {'surfaces':[], 'rects':[]}
 
     def run_app(self):
-        cam = Popen(['sudo', 'python', '/home/pi/tyos/adafruit-pi-cam-master/cam.py'])
+        cam = Popen(['sudo', 'python', '/home/pi/adafruit-pi-cam/cam.py'])
         pygame.quit()
         sys.exit()
         
