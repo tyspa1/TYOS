@@ -78,9 +78,11 @@ class tyos():
         
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
-        t = time.strftime("%H:%M").lstrip('0')
+        t = time.strftime("%H:%M")
         if int(t[0] + t[1]) > 12:
             t = str(int(t[0] + t[1]) - 12) + t[-3:]
+
+        t = t.lstrip('0')
             
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
         self.surface.blit(self.clock_text, self.images['rects'][1])

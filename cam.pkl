@@ -1,7 +1,7 @@
 (dp1
 S'fx'
 p2
-I5
+I0
 sS'iso'
 p3
 I0
