@@ -41,5 +41,3 @@ class SerialPort():
 if __name__ == '__main__':
     test = SerialPort()
     test.connect()
-    #test.check()
-

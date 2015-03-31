@@ -82,8 +82,10 @@ class Toolbar():
             else:
                 self.raw_reception = self.raw_reception.replace(i, '', 1)
                 break
-            
-        self.reception = int(self.raw_reception)
+        try: 
+            self.reception = int(self.raw_reception)
+        except:
+            self.reception = 0
 
         #Convert to bars
         if self.reception > 23:
