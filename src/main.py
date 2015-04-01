@@ -40,6 +40,7 @@ class tyos():
         self.WINDOWWIDTH = 320
         self.WINDOWHIEGHT = 480
         self.surface = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHIEGHT), pygame.FULLSCREEN)
+        pygame.mouse.set_visible(False)
 
         self.clock = pygame.time.Clock()
 
