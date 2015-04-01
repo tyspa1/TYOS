@@ -2,16 +2,18 @@
 #Copyright (c) 2015 Tyler Spadgenske
 #MIT License
 VERSION = '0.1.0'
-
-import pygame, sys, os, time, datetime, power
+POWER_FONA = True
+import pygame, sys, os, time, datetime
 from pygame.locals import *
-import framebuffer, toolbar, apps, serialport
+import framebuffer, toolbar, apps, serialport, recieve
 
 class tyos():
     def __init__(self):
         self.VERSION = VERSION
-        power.Power().toggle()
-        time.sleep(5)
+        if POWER_FONA:
+            import power
+            power.Power().toggle()
+            time.sleep(10)
 
         #Setup fona
         self.fona = serialport.SerialPort()
@@ -23,6 +25,7 @@ class tyos():
         self.scope = framebuffer.pyscope()
         self.toolbar = toolbar.Toolbar(self.fona)
         self.apps = apps.App(self.fona)
+        self.reciever = recieve.Recieve(self.fona)
 
         pygame.init()
 
@@ -105,6 +108,9 @@ class tyos():
                                                                                               self.bat_left)
             #Open app if tapped
             self.apps.open_app()
+
+            #Check for calls and sms
+            self.update = self.reciever.check(self.update)
             
             #Update if necessary
             if self.update:
@@ -147,11 +153,18 @@ class tyos():
             for surface, rect in zip(self.apps.logos['surfaces'], self.apps.logos['rects']):
                 self.surface.blit(surface, rect)
 
+        #Blit incoming call
+        if self.reciever.call_coming:
+            for surface, rect in zip(self.reciever.blit['surfaces'], self.reciever.blit['rects']):
+                    self.surface.blit(surface, rect)
+
     def handle_events(self):
         for event in pygame.event.get():
             self.update = True
             self.apps.update_app = True
             self.app_bar = self.apps.check(event)
+            if self.reciever.call_coming:
+                self.reciever.get_events(event)
                 
 phone = tyos()
 try:
@@ -160,5 +173,7 @@ try:
 except KeyboardInterrupt:
     print
     print 'Closing TYOS ' + phone.VERSION
+    if POWER_FONA:
+        power.Power().toggle()
     pygame.quit()
     sys.exit()
