@@ -10,6 +10,7 @@ from subprocess import Popen
 
 class Run():
     def __init__(self, fona):
+        self.POWER_DOWN = True
         #Stuff to follow app protocol
         self.exit = False
         self.blit_one_surface = {'surface':[], 'rects':[]}
@@ -19,7 +20,8 @@ class Run():
         os.system('sudo python /home/pi/tyos/src/power.py') #Power off fona
         pygame.quit()
         time.sleep(1)
-        #a = Popen(['sudo', 'halt']) #Power down Raspberry Pi
+        if self.POWER_DOWN:
+            a = Popen(['sudo', 'halt']) #Power down Raspberry Pi
         sys.exit()
 
     def get_events(self, event):

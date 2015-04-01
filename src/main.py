@@ -2,15 +2,22 @@
 #Copyright (c) 2015 Tyler Spadgenske
 #MIT License
 VERSION = '0.1.0'
-POWER_FONA = True
+
 import pygame, sys, os, time, datetime
 from pygame.locals import *
 import framebuffer, toolbar, apps, serialport, recieve
 
 class tyos():
     def __init__(self):
+        for arg in sys.argv:
+            if arg == '--power':
+                self.POWER_FONA = True
+                print 'Powering FONA on...'
+            else:
+                self.POWER_FONA = False
+            
         self.VERSION = VERSION
-        if POWER_FONA:
+        if self.POWER_FONA:
             import power
             power.Power().toggle()
             time.sleep(10)
@@ -173,7 +180,7 @@ try:
 except KeyboardInterrupt:
     print
     print 'Closing TYOS ' + phone.VERSION
-    if POWER_FONA:
+    if phone.POWER_FONA:
         power.Power().toggle()
     pygame.quit()
     sys.exit()
