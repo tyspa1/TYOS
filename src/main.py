@@ -1,7 +1,7 @@
 #Main.py
 #Copyright (c) 2015 Tyler Spadgenske
 #MIT License
-VERSION = '0.1.0'
+VERSION = '0.2.0.dev'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
@@ -40,7 +40,7 @@ class tyos():
         self.WINDOWWIDTH = 320
         self.WINDOWHIEGHT = 480
         self.surface = pygame.display.set_mode((self.WINDOWWIDTH, self.WINDOWHIEGHT), pygame.FULLSCREEN)
-        pygame.mouse.set_visible(False)
+        #pygame.mouse.set_visible(False)
 
         self.clock = pygame.time.Clock()
 
