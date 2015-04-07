@@ -136,6 +136,8 @@ class Run():
         if self.call == 1:
             if len(self.call_number) == 10:
                 self.valid_call = True
+            elif len(self.call_number) == 11 and self.call_number[0] == '1': #Long distance
+                self.valid_call = True
             else:
                 self.valid_call = False
                 

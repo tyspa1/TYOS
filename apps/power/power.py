@@ -10,14 +10,15 @@ from subprocess import Popen
 
 class Run():
     def __init__(self, fona):
-        self.POWER_DOWN = True
+        self.POWER_DOWN = False
         #Stuff to follow app protocol
         self.exit = False
         self.blit_one_surface = {'surface':[], 'rects':[]}
         self.blit = {'surfaces':[], 'rects':[]}
 
     def run_app(self):
-        os.system('sudo python /home/pi/tyos/src/power.py') #Power off fona
+        if self.POWER_DOWN:
+            os.system('sudo python /home/pi/tyos/src/power.py') #Power off fona
         pygame.quit()
         time.sleep(1)
         if self.POWER_DOWN:
