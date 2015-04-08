@@ -1,4 +1,4 @@
-#Call App
+#Message App
 #copyright (c) 2015 Tyler Spadgenske
 #MIT License
 ###############################
@@ -19,7 +19,7 @@ class Run():
         self.valid = False
         
         #Variables
-        self.mode = 0 #0=number, 1=text
+        self.mode = 2
         self.number = ''
         self.message = ''
         
@@ -31,10 +31,41 @@ class Run():
         self.keyboard_rect.x = 6
         self.keyboard_rect.y = 293
 
+        #Main conversation image
+        self.conversation_image = pygame.image.load('/home/pi/tyos/apps/message/conversation.png')
+        self.conversation_rect = self.conversation_image.get_rect()
+        self.conversation_rect.centerx = 160
+        self.conversation_rect.centery = 260
+        
         #Setup text
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
+        self.message_font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 12)
+        
+        #Says... text
+        self.says_text1 = self.font.render('Tyler says...', True, self.BLACK, self.WHITE)
+        self.says_rect1 = self.says_text1.get_rect()
+        self.says_rect1.x = 35
+        self.says_rect1.y = 120
+        self.says_text2 = self.font.render('Billy says...', True, self.BLACK, self.WHITE)
+        self.says_rect2 = self.says_text2.get_rect()
+        self.says_rect2.x = 35
+        self.says_rect2.y = 233
 
+        #Message lines
+        self.message_line1 = self.font.render('aaaaa', True, self.BLACK, self.WHITE)
+        self.message_line1_rect = self.message_line1.get_rect()
+        self.message_line1_rect.x = 42
+        self.message_line1_rect.y = 155
+        self.message_line2 = self.font.render('bbbbb', True, self.BLACK, self.WHITE)
+        self.message_line2_rect = self.message_line2.get_rect()
+        self.message_line2_rect.x = 42
+        self.message_line2_rect.y = 175
+        self.message_line3 = self.font.render('ccccccc', True, self.BLACK, self.WHITE)
+        self.message_line3_rect = self.message_line3.get_rect()
+        self.message_line3_rect.x = 42
+        self.message_line3_rect.y = 195
+        
         #Number to send
         #Setup numbers Text
         self.number_text = self.font.render(self.number, True, self.BLACK, self.WHITE)
@@ -67,10 +98,13 @@ class Run():
         #Stuff to follow app protocol
         self.exit = False
         self.blit_one_surface = {'surface':[], 'rects':[]}
-        self.blit = {'surfaces':[self.keyboard_image, self.bubble, self.line1, self.line2,
+        self.blit_mode1 = {'surfaces':[self.keyboard_image, self.bubble, self.line1, self.line2,
                                  self.line3, self.number_text], 'rects':[self.keyboard_rect, self.bubble_rect, self.line1_rect, self.line2_rect,
                                                        self.line3_rect, self.number_rect]}
-
+        self.blit_mode2 = {'surfaces':[self.conversation_image, self.says_text1, self.says_text2, self.message_line1, self.message_line2, self.message_line3], 'rects':[self.conversation_rect,
+                                                                                           self.says_rect1, self.says_rect2, self.message_line1_rect, self.message_line2_rect, self.message_line3_rect]}
+        self.blit = self.blit_mode2
+        
     def run_app(self):
         if len(self.number) == 10:
             self.valid = True
@@ -87,9 +121,26 @@ class Run():
             self.fona.transmit(self.message)
             time.sleep(.25)
             self.fona.transmit(chr(26))
-            self.exit = True
+            self.mode = 2
+            self.blit = self.blit_mode2
 
     def get_events(self, event):
+        if self.mode != 2:
+            self.get_keyboard_events(event)
+        else:
+            self.get_read_events(event)
+
+    def get_read_events(self, event):
+        if event.pos[0] > 35 and event.pos[0] < 285:
+            if event.pos[1] > 62 and event.pos[1] < 105:
+                print 'up arrow'
+            if event.pos[1] > 352 and event.pos[1] < 403:
+                print 'down arrow'
+            if event.pos[1] > 410 and event.pos[1] < 455:
+                self.mode = 0
+                self.blit = self.blit_mode1
+            
+    def get_keyboard_events(self, event):
         #Get key pressed
         #Row 1
         if event.pos[1] > 290 and event.pos[1] < 330:
