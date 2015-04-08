@@ -1,6 +1,6 @@
 #App Toolbar
 #copyright (c) 2015 Tyler Spadgenske
-#GPL License
+#MIT License
 
 import time, os
 import pygame

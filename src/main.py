@@ -1,7 +1,7 @@
 #Main.py
 #Copyright (c) 2015 Tyler Spadgenske
 #MIT License
-VERSION = '0.2.0.dev'
+VERSION = '0.2.1.dev'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
@@ -119,6 +119,10 @@ class tyos():
 
             #Check for calls and sms
             self.update = self.reciever.check(self.update)
+            #Close app if opened and call coming in
+            if self.reciever.call_coming:
+                self.apps.app_to_open = None
+                self.apps.blit_logo = True
             
             #Update if necessary
             if self.update:
