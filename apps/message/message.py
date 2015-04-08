@@ -1,9 +1,9 @@
 #Message App
 #copyright (c) 2015 Tyler Spadgenske
 #MIT License
-###############################
-#To be packaged with stock TYOS
-###############################
+################################
+#To be packaged with stock TYOS#
+################################
 
 import pygame, time
 from pygame.locals import *
@@ -22,6 +22,9 @@ class Run():
         self.mode = 2
         self.number = ''
         self.message = ''
+
+        self.sms_messages = {'messages':['Testing 123...', 'Hello World'], 'senders':['Robot', 'Me']}
+        self.page = 1
         
         #Load images
         self.keyboard_image = pygame.image.load('/home/pi/tyos/apps/message/keyboard.png')
@@ -53,18 +56,31 @@ class Run():
         self.says_rect2.y = 233
 
         #Message lines
-        self.message_line1 = self.font.render('aaaaa', True, self.BLACK, self.WHITE)
+        self.message_line1 = self.font.render('', True, self.BLACK, self.WHITE)
         self.message_line1_rect = self.message_line1.get_rect()
         self.message_line1_rect.x = 42
         self.message_line1_rect.y = 155
-        self.message_line2 = self.font.render('bbbbb', True, self.BLACK, self.WHITE)
+        self.message_line2 = self.font.render('', True, self.BLACK, self.WHITE)
         self.message_line2_rect = self.message_line2.get_rect()
         self.message_line2_rect.x = 42
-        self.message_line2_rect.y = 175
-        self.message_line3 = self.font.render('ccccccc', True, self.BLACK, self.WHITE)
+        self.message_line2_rect.y = 177
+        self.message_line3 = self.font.render('', True, self.BLACK, self.WHITE)
         self.message_line3_rect = self.message_line3.get_rect()
         self.message_line3_rect.x = 42
-        self.message_line3_rect.y = 195
+        self.message_line3_rect.y = 199
+
+        self.message2_line1 = self.font.render('', True, self.BLACK, self.WHITE)
+        self.message2_line1_rect = self.message2_line1.get_rect()
+        self.message2_line1_rect.x = 42
+        self.message2_line1_rect.y = 270
+        self.message2_line2 = self.font.render('', True, self.BLACK, self.WHITE)
+        self.message2_line2_rect = self.message2_line2.get_rect()
+        self.message2_line2_rect.x = 42
+        self.message2_line2_rect.y = 293
+        self.message2_line3 = self.font.render('', True, self.BLACK, self.WHITE)
+        self.message2_line3_rect = self.message2_line3.get_rect()
+        self.message2_line3_rect.x = 42
+        self.message2_line3_rect.y = 316
         
         #Number to send
         #Setup numbers Text
@@ -101,10 +117,40 @@ class Run():
         self.blit_mode1 = {'surfaces':[self.keyboard_image, self.bubble, self.line1, self.line2,
                                  self.line3, self.number_text], 'rects':[self.keyboard_rect, self.bubble_rect, self.line1_rect, self.line2_rect,
                                                        self.line3_rect, self.number_rect]}
-        self.blit_mode2 = {'surfaces':[self.conversation_image, self.says_text1, self.says_text2, self.message_line1, self.message_line2, self.message_line3], 'rects':[self.conversation_rect,
-                                                                                           self.says_rect1, self.says_rect2, self.message_line1_rect, self.message_line2_rect, self.message_line3_rect]}
+        self.blit_mode2 = {'surfaces':[self.conversation_image, self.says_text1, self.says_text2, self.message_line1,
+                                       self.message_line2, self.message_line3,
+                                       self.message2_line1, self.message2_line2,
+                                       self.message2_line3], 'rects':[self.conversation_rect,
+                                                                                           self.says_rect1, self.says_rect2,
+                                                                      self.message_line1_rect, self.message_line2_rect,
+                                                                      self.message_line3_rect, self.message2_line1_rect,
+                                                                      self.message2_line2_rect,self.message2_line3_rect]}
         self.blit = self.blit_mode2
+        self.config_sms()
         
+    def config_sms(self):
+        self.blit['surfaces'][1] = self.font.render(self.sms_messages['senders'][(self.page + 1) * -1] + ' says...', True, self.BLACK, self.WHITE)
+        self.blit['surfaces'][2] = self.font.render(self.sms_messages['senders'][self.page * -1] + ' says...', True, self.BLACK, self.WHITE)
+        #Box 1 line 1
+        self.blit['surfaces'][3] = self.font.render(self.sms_messages['messages'][(self.page + 1) * -1][:25], True, self.BLACK, self.WHITE)
+        if len(self.sms_messages['messages'][(self.page + 1) * -1]) > 25:
+            self.blit['surfaces'][4] = self.font.render(self.sms_messages['messages'][(self.page + 1)* -1][25:50], True, self.BLACK, self.WHITE)
+            if len(self.sms_messages['messages'][(self.page + 1) * -1]) > 50:
+                self.blit['surfaces'][5] = self.font.render(self.sms_messages['messages'][(self.page + 1)* -1][50:75], True, self.BLACK, self.WHITE)
+        else:
+            self.blit['surfaces'][4] = self.font.render('', True, self.BLACK, self.WHITE)
+            self.blit['surfaces'][5] = self.font.render('', True, self.BLACK, self.WHITE)
+            
+        #Box 2 line 1
+        self.blit['surfaces'][6] = self.font.render(self.sms_messages['messages'][self.page * -1][:25], True, self.BLACK, self.WHITE)
+        if len(self.sms_messages['messages'][self.page * -1]) > 25:
+            self.blit['surfaces'][7] = self.font.render(self.sms_messages['messages'][self.page * -1][25:50], True, self.BLACK, self.WHITE)
+            if len(self.sms_messages['messages'][self.page * -1]) > 50:
+                self.blit['surfaces'][8] = self.font.render(self.sms_messages['messages'][self.page * -1][50:75], True, self.BLACK, self.WHITE)
+        else:
+            self.blit['surfaces'][7] = self.font.render('', True, self.BLACK, self.WHITE)
+            self.blit['surfaces'][8] = self.font.render('', True, self.BLACK, self.WHITE)
+            
     def run_app(self):
         if len(self.number) == 10:
             self.valid = True
@@ -133,9 +179,16 @@ class Run():
     def get_read_events(self, event):
         if event.pos[0] > 35 and event.pos[0] < 285:
             if event.pos[1] > 62 and event.pos[1] < 105:
-                print 'up arrow'
+                self.page += 1
+                if self.page == len(self.sms_messages['senders']):
+                    self.page = len(self.sms_messages['senders']) - 1
+                self.config_sms()
+                
             if event.pos[1] > 352 and event.pos[1] < 403:
-                print 'down arrow'
+                self.page -= 1
+                if self.page == 0:
+                    self.page = 1
+                self.config_sms()
             if event.pos[1] > 410 and event.pos[1] < 455:
                 self.mode = 0
                 self.blit = self.blit_mode1
