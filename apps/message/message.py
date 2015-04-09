@@ -23,7 +23,7 @@ class Run():
         self.number = ''
         self.message = ''
 
-        self.sms_messages = {'messages':['Testing 123...', 'Hello World'], 'senders':['Robot', 'Me']}
+        self.sms_messages = {'messages':[], 'senders':[]}
         self.page = 1
         
         #Load images
@@ -126,8 +126,25 @@ class Run():
                                                                       self.message_line3_rect, self.message2_line1_rect,
                                                                       self.message2_line2_rect,self.message2_line3_rect]}
         self.blit = self.blit_mode2
+        print 'RETRIEVING SMS MESSAGES...'
+        self.get_sms()
         self.config_sms()
-        
+
+    def get_sms(self):
+        #Set to text mode
+        self.fona.transmit('AT+CMGF=1')
+        self.fona.transmit('AT+CSDH=1')
+        #Get number of sms messages
+        num_sms = self.fona.transmit('AT+CPMS?')
+        num_sms = num_sms[1]
+        num_sms = num_sms[14:16]
+        print 'SMS FOUND IN MEMORY: ' + num_sms
+    
+        #Retrieve sms messages
+        for i in range(1, int(num_sms) + 1):
+            self.sms_messages['senders'].append(self.fona.transmit('AT+CMGR=' + str(i))[1].split('"')[3].replace('+',''))
+            self.sms_messages['messages'].append(self.fona.transmit('AT+CMGR=' + str(i))[2])
+            
     def config_sms(self):
         self.blit['surfaces'][1] = self.font.render(self.sms_messages['senders'][(self.page + 1) * -1] + ' says...', True, self.BLACK, self.WHITE)
         self.blit['surfaces'][2] = self.font.render(self.sms_messages['senders'][self.page * -1] + ' says...', True, self.BLACK, self.WHITE)
@@ -152,6 +169,8 @@ class Run():
             self.blit['surfaces'][8] = self.font.render('', True, self.BLACK, self.WHITE)
             
     def run_app(self):
+        if self.exit:
+            self.mode = 2
         if len(self.number) == 10:
             self.valid = True
         else:
