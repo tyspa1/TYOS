@@ -48,3 +48,6 @@ class Run():
         pygame.quit()
         time.sleep(1)
         sys.exit()
+
+    def on_first_run(self):
+        pass

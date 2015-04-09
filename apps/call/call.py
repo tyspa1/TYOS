@@ -162,3 +162,6 @@ class Run():
     
     def run_app(self):
         self.call_person()
+
+    def on_first_run(self):
+        pass

@@ -23,3 +23,6 @@ class Run():
         
     def get_events(self, event):
         pass
+
+    def on_first_run(self):
+        pass

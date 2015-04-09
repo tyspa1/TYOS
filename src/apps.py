@@ -16,11 +16,13 @@ class App():
         self.opened = False
         self.close_apps = False
         self.app_to_open = None
+        self.opened_app  = None
         self.blit_logo = True
         #Setup default apps
         self.get_app_order()
         self.load_logos()
         self.import_app()
+        self.first_run = True
 
     def import_app(self):
         #Import stock apps
@@ -36,11 +38,16 @@ class App():
     def open_app(self):
         if self.app_to_open != None:
             self.blit_logo = False
+            if self.first_run or self.opened_app != self.app_to_open:
+                self.opened_app = self.app_to_open
+                self.app_objects[self.app_to_open].on_first_run()
+                self.first_run = False
             self.app_objects[self.app_to_open].run_app() #TODO: Call real app, not test()
             if self.app_objects[self.app_to_open].exit:
                 self.app_objects[self.app_to_open].exit = False
                 self.app_to_open = None
                 self.blit_logo = True
+                self.first_run = True
             
     def load_logos(self):
         #Load the first four app's logo

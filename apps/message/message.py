@@ -19,9 +19,10 @@ class Run():
         self.valid = False
         
         #Variables
-        self.mode = 2
+        self.mode = 3
         self.number = ''
         self.message = ''
+        self.first = False
 
         self.sms_messages = {'messages':[], 'senders':[]}
         self.page = 1
@@ -44,6 +45,12 @@ class Run():
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
         self.message_font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 12)
+
+        #please wait Text
+        self.wait = self.font.render('Please wait...', True, self.BLACK, self.WHITE)
+        self.wait_rect = self.wait.get_rect()
+        self.wait_rect.centerx = 160
+        self.wait_rect.centery = 240
         
         #Says... text
         self.says_text1 = self.font.render('Tyler says...', True, self.BLACK, self.WHITE)
@@ -124,12 +131,14 @@ class Run():
                                                                                            self.says_rect1, self.says_rect2,
                                                                       self.message_line1_rect, self.message_line2_rect,
                                                                       self.message_line3_rect, self.message2_line1_rect,
-                                                                      self.message2_line2_rect,self.message2_line3_rect]}
+                                                                       self.message2_line2_rect,self.message2_line3_rect]}
+        self.blit_mode3 = {'surfaces':[self.wait], 'rects':[self.wait_rect]}
         self.blit = self.blit_mode2
-        print 'RETRIEVING SMS MESSAGES...'
-        self.get_sms()
-        self.config_sms()
 
+    def on_first_run(self):
+        self.first = False
+        self.mode = 3
+        
     def get_sms(self):
         #Set to text mode
         self.fona.transmit('AT+CMGF=1')
@@ -139,7 +148,7 @@ class Run():
         num_sms = num_sms[1]
         num_sms = num_sms[14:16]
         print 'SMS FOUND IN MEMORY: ' + num_sms
-    
+        print 'LOADING SMS MESSAGES...'
         #Retrieve sms messages
         for i in range(1, int(num_sms) + 1):
             self.sms_messages['senders'].append(self.fona.transmit('AT+CMGR=' + str(i))[1].split('"')[3].replace('+',''))
@@ -169,6 +178,17 @@ class Run():
             self.blit['surfaces'][8] = self.font.render('', True, self.BLACK, self.WHITE)
             
     def run_app(self):
+        if self.mode == 3:
+            self.blit = self.blit_mode3
+            if self.first:
+                time.sleep(5)
+                self.mode = 2
+                self.blit = self.blit_mode2
+                self.sms_messages = {'messages':[], 'senders':[]}
+                self.get_sms()
+                self.config_sms()
+            self.first = True
+                
         if self.exit:
             self.mode = 2
         if len(self.number) == 10:
