@@ -4,7 +4,7 @@
 import time, pygame
 import RPi.GPIO as io
 
-class Recieve():
+class Receive():
     def __init__(self, fona):
         io.setmode(io.BCM)
         io.setup(4, io.IN)

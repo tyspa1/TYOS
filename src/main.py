@@ -5,7 +5,7 @@ VERSION = '0.2.1.dev'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
-import framebuffer, toolbar, apps, serialport, recieve
+import framebuffer, toolbar, apps, serialport, receive
 
 class tyos():
     def __init__(self):
@@ -32,7 +32,7 @@ class tyos():
         self.scope = framebuffer.pyscope()
         self.toolbar = toolbar.Toolbar(self.fona)
         self.apps = apps.App(self.fona)
-        self.reciever = recieve.Recieve(self.fona)
+        self.reciever = receive.Receive(self.fona)
 
         pygame.init()
 
