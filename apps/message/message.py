@@ -134,6 +134,20 @@ class Run():
                                                                        self.message2_line2_rect,self.message2_line3_rect]}
         self.blit_mode3 = {'surfaces':[self.wait], 'rects':[self.wait_rect]}
         self.blit = self.blit_mode2
+        self.load_contacts()
+
+    def load_contacts(self):
+        self.contacts = {'names':[], 'numbers':[]}
+        try:
+            contact_file = open('/home/pi/tyos/configure/contacts.conf', 'r')
+        except:
+            print 'NO CONTACTS FOUND'
+            print 'PLEASE CREATE /home/pi/tyos/configure/contacts.conf FILE'
+
+        self.contact_list = contact_file.readlines()
+        contact_file.close()
+        for i in range(0, len(self.contact_list)):
+            self.contact_list[i] = self.contact_list[i].rstrip().split('=')
 
     def on_first_run(self):
         self.first = False
@@ -153,7 +167,16 @@ class Run():
         for i in range(1, int(num_sms) + 1):
             self.sms_messages['senders'].append(self.fona.transmit('AT+CMGR=' + str(i))[1].split('"')[3].replace('+',''))
             self.sms_messages['messages'].append(self.fona.transmit('AT+CMGR=' + str(i))[2])
-            
+
+        #If in contacts, replace number with name
+        for i in self.contact_list:
+            index = 0
+            for senders in self.sms_messages['senders']:
+                if i[1] == senders:
+                    self.sms_messages['senders'][index] = i[0]
+                index += 1
+                    
+                
     def config_sms(self):
         self.blit['surfaces'][1] = self.font.render(self.sms_messages['senders'][(self.page + 1) * -1] + ' says...', True, self.BLACK, self.WHITE)
         self.blit['surfaces'][2] = self.font.render(self.sms_messages['senders'][self.page * -1] + ' says...', True, self.BLACK, self.WHITE)
