@@ -1,7 +1,18 @@
-#Main.py
+#main.py
 #Copyright (c) 2015 Tyler Spadgenske
 #MIT License
-VERSION = '0.2.3'
+
+'''
+Usage:
+If FONA is powered off, run sudo python /home/pi/tyos/src/main.py --power to turn module on and start TYOS.
+If FONA is already on, just run sudo python /home/pi/tyos/src/main.py
+Upgrade:
+To check for updates go to https://github.com/spadgenske/TYOS/releases/latest and compare the version number with your
+current version of TYOS. If higher, you can update. To your version of TYOS run the command
+sudo python /home/pi/tyos/src/main.py --version
+'''
+
+VERSION = '0.2.4'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
