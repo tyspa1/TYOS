@@ -1,6 +1,6 @@
 # TYOS
-0.1.0 alpha</br>
-A mobile Operating System for the tyfone
+0.2.4 Alpha</br>
+A mobile operating system for the tyfone
 
 copyright (c) 2015 Tyler Spadgenske
 
