@@ -25,12 +25,12 @@ class Toolbar():
         self.bat_left_rect.centerx = 285
         self.bat_left_rect.centery = 15
 
-        #Setup reception/battery clock
-        self.last_update = time.time()
-
         #Set the Pi clock to the Fona RTC
         self.rtc()
 
+        #Setup reception/battery clock
+        self.last_update = time.time()
+        
     def rtc(self):
         self.rtc_time = self.fona.transmit('AT+CCLK?')
         self.rtc_time = self.rtc_time[1]
@@ -86,6 +86,7 @@ class Toolbar():
             self.reception = int(self.raw_reception)
         except:
             self.reception = 0
+            print 'ERROR'
 
         #Convert to bars
         if self.reception > 23:

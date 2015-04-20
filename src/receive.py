@@ -14,6 +14,12 @@ class Receive():
         self.pressed = False
         self.call_coming = False
 
+        self.total_sms = self.fona.transmit('AT+CPMS?')
+        self.total_sms = self.total_sms[1]
+        self.total_sms = self.total_sms[14:16]
+        self.total_sms = int(self.total_sms)
+        print 'TOTAL SMS: ', str(self.total_sms)
+
         #Colors
         self.WHITE = (255,255,255)
         self.BLACK = (0,0,0)
@@ -40,8 +46,20 @@ class Receive():
 
     def check(self, update):
         if io.input(4) == 0:
-            self.call_coming = True
+            num_sms = self.fona.transmit('AT+CPMS?')
+            num_sms = num_sms[1]
+            num_sms = num_sms[14:16]
+            try:
+                num_sms = int(num_sms)
+                if num_sms > self.total_sms:
+                    print 'New Message!'
+                    self.total_sms = num_sms
+                else:
+                    self.call_coming = True
+            except:
+                print 'Error calculating sms quanity'
             update = True
+            
         if self.call_coming:
             self.incoming_call()
         return update
