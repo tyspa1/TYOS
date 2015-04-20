@@ -9,7 +9,7 @@ from pygame.locals import *
 class Toolbar():
     def __init__(self, fona):
         self.UPDATE_TIME = 30
-        self.DEAD = 70
+        self.DEAD = 30
         
         #Setup fona
         self.fona = fona
@@ -136,23 +136,8 @@ class Toolbar():
         #Get battery level from fona
         self.raw_data = self.fona.transmit('AT+CBC')
         self.raw_data = self.raw_data[1]
-
-        #Remove line feeds and echo
-        for i in self.raw_data:
-            if i != ',':
-                self.raw_data = self.raw_data.replace(i, '', 1)
-            else:
-                break
-        
-        #Extract percentage
-        for i in reversed(self.raw_data):
-            if i != ',':
-                self.raw_data = self.raw_data.replace(i, '', 1)
-            else:
-                break
-
-        #Put percentage in text
-        self.percentage = self.raw_data.replace(',', '')   
+        self.raw_data = self.raw_data.split(',')
+        self.percentage = self.raw_data[1]
 
         print 'BATTERY LEVEL: ' + self.percentage + '%'
         if int(self.percentage) < self.DEAD:
