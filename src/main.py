@@ -13,11 +13,11 @@ class tyos():
             if arg == '--power':
                 self.POWER_FONA = True
                 print 'Powering FONA on...'
+            else:
+                self.POWER_FONA = False
             if arg == '--version':
                 print 'TYOS VERSION ' + VERSION
                 sys.exit()
-            else:
-                self.POWER_FONA = False
             
         self.VERSION = VERSION
         if self.POWER_FONA:
@@ -68,6 +68,12 @@ class tyos():
         self.bat_rect.centery = 15
         self.bat_rect.right = self.WINDOWWIDTH - 10
 
+        #Setup Low Battery Icon
+        self.low_bat = pygame.image.load('/home/pi/tyos/graphics/low_bat.png')
+        self.low_bat_rect = self.low_bat.get_rect()
+        self.low_bat_rect.centery = 380
+        self.low_bat_rect.centerx = self.surface.get_rect().centerx
+
         #Setup App Toolbar
         self.app_toolbar = pygame.Rect(0, 0, 320, 30)
 
@@ -91,6 +97,7 @@ class tyos():
         self.images = {'surfaces':[self.bat], 'rects':[self.bat_rect, self.clock_text_rect]}
 
         self.blit_logo = True
+        self.dead_bat = False
         
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
@@ -111,7 +118,7 @@ class tyos():
             pygame.display.update()
             self.clock.tick()
             #Update battery and reception
-            self.reception_bars, self.bat_left, self.update = self.toolbar.clock(self.reception_bars, self.bat_left,
+            self.reception_bars, self.bat_left, self.update, self.dead_bat = self.toolbar.clock(self.reception_bars, self.bat_left,
                                                                                  self.update, self.apps.pixel)
             #Move images if necessary
             self.update, self.images, self.rectangles, self.reception_bars, self.bat_left = self.apps.open(self.update, self.images,
@@ -163,6 +170,8 @@ class tyos():
         #Blit logo
         if self.apps.blit_logo:
             self.surface.blit(self.logo, self.logo_rect)
+            if self.dead_bat:
+                self.surface.blit(self.low_bat, self.low_bat_rect)
 
         if self.apps.logos['rects'][0].y != -50:
             for surface, rect in zip(self.apps.logos['surfaces'], self.apps.logos['rects']):

@@ -9,12 +9,16 @@ from pygame.locals import *
 class Toolbar():
     def __init__(self, fona):
         self.UPDATE_TIME = 30
+        self.DEAD = 70
+        
         #Setup fona
         self.fona = fona
 
         #Define colors
         self.WHITE = (255,255,255)
         self.BLACK = (0,0,0)
+
+        self.dead_bat = False
 
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 14)
@@ -151,6 +155,8 @@ class Toolbar():
         self.percentage = self.raw_data.replace(',', '')   
 
         print 'BATTERY LEVEL: ' + self.percentage + '%'
+        if int(self.percentage) < self.DEAD:
+            self.dead_bat = True
 
         text['surface'] = self.font.render(self.percentage + '%', True, self.BLACK, self.WHITE)
         
@@ -165,7 +171,7 @@ class Toolbar():
             text = self.check_battery(text)
             update = True
 
-        return rects, text, update
+        return rects, text, update, self.dead_bat
 
 if __name__ == '__main__':
     pygame.init()
