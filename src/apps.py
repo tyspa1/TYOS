@@ -2,7 +2,7 @@
 #Copyright (c) 2015 Tyler Spadgenske
 #MIT License
 
-import pygame
+import pygame, sys
 from pygame.locals import *
 import imp
 
@@ -67,6 +67,10 @@ class App():
         order_file = open('/home/pi/tyos/apps/order.txt', 'r')
         order = order_file.readlines()
 
+        if len(order) < 4:
+            print 'Not enough apps in storage!'
+            pygame.quit()
+            sys.exit()
         for i in range(0, len(order)):
             order[i] = order[i].rstrip()
 
