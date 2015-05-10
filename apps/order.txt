@@ -1,4 +1,7 @@
 call
 message
-camera
+app-list
 power
+camera
+shop
+settings

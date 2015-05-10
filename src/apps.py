@@ -42,11 +42,14 @@ class App():
                 self.opened_app = self.app_to_open
                 self.app_objects[self.app_to_open].on_first_run()
                 self.first_run = False
-            self.app_objects[self.app_to_open].run_app() #TODO: Call real app, not test()
+            self.app_objects[self.app_to_open].run_app() 
             if self.app_objects[self.app_to_open].exit:
                 self.app_objects[self.app_to_open].exit = False
-                self.app_to_open = None
-                self.blit_logo = True
+                if self.app_objects[self.app_to_open].next_app != None:
+                    self.app_to_open = self.app_order.index(self.app_objects[self.app_to_open].next_app)
+                else:
+                    self.app_to_open = None
+                    self.blit_logo = True
                 self.first_run = True
             
     def load_logos(self):

@@ -22,6 +22,7 @@ class Run():
         self.exit = False
         self.blit_one_surface = {'surface':[], 'rects':[]}
         self.blit = {'surfaces':[self.shutdown_image], 'rects':[self.shutdown_rect]}
+        self.next_app = None
 
     def run_app(self):
         pass

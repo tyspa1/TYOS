@@ -11,6 +11,7 @@ from pygame.locals import *
 class Run():
     def __init__(self, fona):
         self.fona = fona
+        self.next_app = None
         
         #Colors
         self.WHITE = (255,255,255)

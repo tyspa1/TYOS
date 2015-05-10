@@ -1,4 +1,4 @@
-#Call App
+#shop App
 #copyright (c) 2015 Tyler Spadgenske
 #GPL License
 ###############################
@@ -18,9 +18,7 @@ class Run():
         self.next_app = None
 
     def run_app(self):
-        cam = Popen(['sudo', 'python', '/home/pi/adafruit-pi-cam/cam.py'])
-        pygame.quit()
-        sys.exit()
+        pass
         
     def get_events(self, event):
         pass
