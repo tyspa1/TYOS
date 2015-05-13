@@ -8,3 +8,5 @@ These icons were drawn by:
 3. Simple Icons
 4. Jardson Almeida
 5. Marek Polakovic
+
+Project Inspired by Dave Hunt's PiPhone and Adafruit's Cam Pi project.

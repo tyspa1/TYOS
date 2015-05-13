@@ -162,6 +162,7 @@ class Run():
         num_sms = self.fona.transmit('AT+CPMS?')
         num_sms = num_sms[1]
         num_sms = num_sms[14:16]
+        num_sms = num_sms.strip(',')
         print 'SMS FOUND IN MEMORY: ' + num_sms
         print 'LOADING SMS MESSAGES...'
         #Retrieve sms messages

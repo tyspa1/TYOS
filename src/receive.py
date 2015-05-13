@@ -17,6 +17,7 @@ class Receive():
         self.total_sms = self.fona.transmit('AT+CPMS?')
         self.total_sms = self.total_sms[1]
         self.total_sms = self.total_sms[14:16]
+        self.total_sms = self.total_sms.strip(',')
         self.total_sms = int(self.total_sms)
         print 'TOTAL SMS: ', str(self.total_sms)
 
