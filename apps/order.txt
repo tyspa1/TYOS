@@ -3,5 +3,4 @@ message
 app-list
 power
 camera
-shop
 settings

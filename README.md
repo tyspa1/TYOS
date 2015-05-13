@@ -1,14 +1,13 @@
 # TYOS
-0.2.4 Alpha</br>
-A mobile operating system for the tyfone
+0.3.2 Beta
+A mobile operating system for the tyfone.
 
 copyright (c) 2015 Tyler Spadgenske
 
 ##Installation and Setup
 Follow the guide at:</br>
-https://instructables.com/id/Build-Your-Own-Smartphone/</br>
+http://instructables.com/id/Build-Your-Own-Smartphone/</br>
 
-##Under Development
-TYOS is under development so when installing make sure you use a release from
-https://github.com/spadgenske/tyos/releases
-otherwise your phone may be buggy.
+##Developers
+TYOS is now in Beta! Developing your own apps is as easy as pi. Check out the
+docs at https://github.com/spadgenske/tyos/wiki

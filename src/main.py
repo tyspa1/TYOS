@@ -12,7 +12,7 @@ current version of TYOS. If higher, you can update. To your version of TYOS run 
 sudo python /home/pi/tyos/src/main.py --version
 '''
 
-VERSION = '0.2.4'
+VERSION = '0.3.2'
 
 import pygame, sys, os, time, datetime
 from pygame.locals import *
