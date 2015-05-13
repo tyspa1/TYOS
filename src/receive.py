@@ -50,6 +50,7 @@ class Receive():
             num_sms = self.fona.transmit('AT+CPMS?')
             num_sms = num_sms[1]
             num_sms = num_sms[14:16]
+            num_sms = num_sms.strip(',')
             try:
                 num_sms = int(num_sms)
                 if num_sms > self.total_sms:
@@ -59,6 +60,10 @@ class Receive():
                     self.call_coming = True
             except:
                 print 'Error calculating sms quanity'
+            update = True
+
+        else:
+            self.call_coming = False
             update = True
             
         if self.call_coming:

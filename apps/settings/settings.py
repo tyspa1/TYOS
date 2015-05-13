@@ -55,7 +55,8 @@ class Run():
         self.exit = False
 
     def delete_sms(self):
-        print 'Deleting SMS messages!'
+        self.fona.transmit('AT+CMGD=1,4')
+        self.exit = True
 
     def set_headset(self):
         if self.headset:

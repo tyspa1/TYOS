@@ -178,6 +178,13 @@ class Run():
                     self.sms_messages['senders'][index] = i[0]
                 index += 1
                     
+        #If there are less than two messages, do some configuring
+        if int(num_sms) < 2:
+            self.sms_messages['senders'].append('')
+            self.sms_messages['messages'].append('')
+            if int(num_sms) == 0:
+                self.sms_messages['senders'].append('')
+                self.sms_messages['messages'].append('')
                 
     def config_sms(self):
         self.blit['surfaces'][1] = self.font.render(self.sms_messages['senders'][(self.page + 1) * -1] + ' says...', True, self.BLACK, self.WHITE)
