@@ -16,6 +16,7 @@ class Run():
         self.exit = False
         self.ongoing_call = False
         self.first_call = True
+        self.next_app = None
 
         self.fona = fona
 
