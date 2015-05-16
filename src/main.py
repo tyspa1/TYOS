@@ -165,7 +165,7 @@ class tyos():
                 
         #Blit all rectangles
         for rect, color in zip(rects['rects'], rects['colors']):
-            pygame.draw.rect(self.surface, color, rected)
+            pygame.draw.rect(self.surface, color, rect)
 
         #Blit all reception bars
         for rect, color in zip(reception['rects'], reception['colors']):
