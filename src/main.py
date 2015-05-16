@@ -14,7 +14,7 @@ sudo python /home/pi/tyos/src/main.py --version
 
 VERSION = '0.3.2'
 
-import pygame, sys, os, time, datetime
+import pygame, sys, os, time, datetime, traceback
 from pygame.locals import *
 import framebuffer, toolbar, apps, serialport, receive
 
@@ -165,7 +165,7 @@ class tyos():
                 
         #Blit all rectangles
         for rect, color in zip(rects['rects'], rects['colors']):
-            pygame.draw.rect(self.surface, color, rect)
+            pygame.draw.rect(self.surface, color, rected)
 
         #Blit all reception bars
         for rect, color in zip(reception['rects'], reception['colors']):
@@ -212,3 +212,12 @@ except KeyboardInterrupt:
         power.Power().toggle()
     pygame.quit()
     sys.exit()
+except:
+    print '******************************************'
+    print 'An Error Occured'
+    print 'Writing to log /home/pi/tyos/logs/tyos.log'
+    print '******************************************'
+    #If error occurs, save it to file
+    error = traceback.format_exc()
+    error_log = open('/home/pi/tyos/logs/tyos.log', 'w')
+    error_log.write(error)
