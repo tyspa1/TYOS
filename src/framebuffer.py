@@ -8,8 +8,8 @@ class pyscope :
     
     def __init__(self):
         os.environ["SDL_FBDEV"] = "/dev/fb1"
-        os.putenv('SDL_MOUSEDRV'   , 'TSLIB')
-        os.putenv('SDL_MOUSEDEV'   , '/dev/input/event0')
+        os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen" #Use touchscreen instead of event0
+        os.environ["SDL_MOUSEDRV"] = "TSLIB"
 
         "Ininitializes a new pygame screen using the framebuffer"
         # Based on "Python GUI in Linux frame buffer"
