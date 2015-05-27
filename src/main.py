@@ -12,7 +12,7 @@ current version of TYOS. If higher, you can update. To your version of TYOS run 
 sudo python /home/pi/tyos/src/main.py --version
 '''
 
-VERSION = '0.3.5'
+VERSION = '0.3.7'
 
 import pygame, sys, os, time, datetime, traceback
 from pygame.locals import *
@@ -203,7 +203,7 @@ class tyos():
                 
 phone = tyos()
 try:
-    phone.home()
+    phone.home() #E.T Reference
     
 except KeyboardInterrupt:
     print
@@ -212,6 +212,8 @@ except KeyboardInterrupt:
         power.Power().toggle()
     pygame.quit()
     sys.exit()
+except SystemExit:
+    pass
 except:
     print '******************************************'
     print 'An Error Occured'

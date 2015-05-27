@@ -161,8 +161,8 @@ class Run():
         #Get number of sms messages
         num_sms = self.fona.transmit('AT+CPMS?')
         num_sms = num_sms[1]
-        num_sms = num_sms[14:16]
-        num_sms = num_sms.strip(',')
+        num_sms = num_sms.split(',')
+        num_sms = num_sms[1]
         print 'SMS FOUND IN MEMORY: ' + num_sms
         print 'LOADING SMS MESSAGES...'
         #Retrieve sms messages
@@ -189,22 +189,26 @@ class Run():
     def config_sms(self):
         self.blit['surfaces'][1] = self.font.render(self.sms_messages['senders'][(self.page + 1) * -1] + ' says...', True, self.BLACK, self.WHITE)
         self.blit['surfaces'][2] = self.font.render(self.sms_messages['senders'][self.page * -1] + ' says...', True, self.BLACK, self.WHITE)
-        #Box 1 line 1
+        #Box 1 
         self.blit['surfaces'][3] = self.font.render(self.sms_messages['messages'][(self.page + 1) * -1][:25], True, self.BLACK, self.WHITE)
         if len(self.sms_messages['messages'][(self.page + 1) * -1]) > 25:
             self.blit['surfaces'][4] = self.font.render(self.sms_messages['messages'][(self.page + 1)* -1][25:50], True, self.BLACK, self.WHITE)
             if len(self.sms_messages['messages'][(self.page + 1) * -1]) > 50:
                 self.blit['surfaces'][5] = self.font.render(self.sms_messages['messages'][(self.page + 1)* -1][50:75], True, self.BLACK, self.WHITE)
+            else:
+                self.blit['surfaces'][5] = self.font.render('', True, self.BLACK, self.WHITE)
         else:
             self.blit['surfaces'][4] = self.font.render('', True, self.BLACK, self.WHITE)
             self.blit['surfaces'][5] = self.font.render('', True, self.BLACK, self.WHITE)
             
-        #Box 2 line 1
+        #Box 2 
         self.blit['surfaces'][6] = self.font.render(self.sms_messages['messages'][self.page * -1][:25], True, self.BLACK, self.WHITE)
         if len(self.sms_messages['messages'][self.page * -1]) > 25:
             self.blit['surfaces'][7] = self.font.render(self.sms_messages['messages'][self.page * -1][25:50], True, self.BLACK, self.WHITE)
             if len(self.sms_messages['messages'][self.page * -1]) > 50:
                 self.blit['surfaces'][8] = self.font.render(self.sms_messages['messages'][self.page * -1][50:75], True, self.BLACK, self.WHITE)
+            else:
+                self.blit['surfaces'][8] = self.font.render('', True, self.BLACK, self.WHITE)
         else:
             self.blit['surfaces'][7] = self.font.render('', True, self.BLACK, self.WHITE)
             self.blit['surfaces'][8] = self.font.render('', True, self.BLACK, self.WHITE)

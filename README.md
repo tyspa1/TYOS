@@ -1,5 +1,5 @@
 # TYOS
-0.3.2 Beta
+0.3.7 Beta
 A mobile operating system for the tyfone.
 
 copyright (c) 2015 Tyler Spadgenske
