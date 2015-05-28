@@ -47,24 +47,25 @@ class Receive():
         self.blit = {'surfaces':[self.call_image, self.incoming], 'rects':[self.call_rect, self.incoming_rect]}
 
     def check(self, update):
-        if io.input(4) == 0:
-            num_sms = self.fona.transmit('AT+CPMS?')
-            num_sms = num_sms[1]
-            num_sms = num_sms[14:16]
-            num_sms = num_sms.strip(',')
+        if io.input(4) == 0: #Check the GPIO connected to the key pin on the FONA
             try:
+                #Get number of sms messages
+                num_sms = self.fona.transmit('AT+CPMS?')
+                num_sms = num_sms[1]
+                num_sms = num_sms.split(',')
+                num_sms = num_sms[1]
                 num_sms = int(num_sms)
-                if num_sms > self.total_sms:
+                if num_sms > self.total_sms: #If there is more messages than before, a SMS has arrived. otherwise a call is coming
                     print 'New Message!'
                     self.total_sms = num_sms
                 else:
                     self.call_coming = True
             except:
-                print 'Error calculating sms quanity'
+                pass
+            
             update = True
 
         else:
-            self.call_coming = False
             update = True
             
         if self.call_coming:
@@ -88,7 +89,7 @@ class Receive():
                 self.mode = 0
 
     def get_events(self, event):
-        if event.type == pygame.locals.MOUSEBUTTONUP:
+        if event.type == pygame.locals.MOUSEBUTTONDOWN:
             if event.pos[0] > 140 and event.pos[0] < 210:
                 if event.pos[1] > 390 and event.pos[1] < 460:
                     self.pressed = True
