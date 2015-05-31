@@ -5,7 +5,7 @@
 #To be packaged with stock TYOS#
 ################################
 
-import pygame, time
+import pygame, time, os
 from pygame.locals import *
 
 class Run():
@@ -142,13 +142,29 @@ class Run():
         try:
             contact_file = open('/home/pi/tyos/configure/contacts.conf', 'r')
         except:
+            print '***********************************************************'
             print 'NO CONTACTS FOUND'
-            print 'PLEASE CREATE /home/pi/tyos/configure/contacts.conf FILE'
+            print 'PLEASE EDIT /home/pi/tyos/configure/contacts.conf FILE'
+            print '***********************************************************'
+            if not os.path.exists('/home/pi/tyos/configure'):
+                os.mkdir('/home/pi/tyos/configure')
+            if not os.path.exists('/home/pi/tyos/logs'):
+                os.mkdir('/home/pi/tyos/logs') #May be in wrong spot, but it works
+            contact_file = open('/home/pi/tyos/configure/contacts.conf', 'w+')
+            contact_file.write('#Contacts\n')
+            contact_file.write('#Use format name=number i.e. Joe=1555666777 # are comments\n')
+            contact_file.close()
+            contact_file = open('/home/pi/tyos/configure/contacts.conf', 'r')
 
         self.contact_list = contact_file.readlines()
         contact_file.close()
+                                
         for i in range(0, len(self.contact_list)):
-            self.contact_list[i] = self.contact_list[i].rstrip().split('=')
+            if self.contact_list[i][0] == '#':
+                pass
+                #Do Nothing. Line is comment
+            else:
+                self.contact_list[i] = self.contact_list[i].rstrip().split('=')                
 
     def on_first_run(self):
         self.first = False

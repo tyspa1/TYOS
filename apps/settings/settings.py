@@ -13,6 +13,7 @@ class Run():
     def __init__(self, fona):
         self.fona = fona
         self.headset = False
+        self.get_audio_mode()
         #Setup colors
         self.RED = (255,0,0)
         self.GREEN = (0,255,0)
@@ -38,7 +39,36 @@ class Run():
         self.exit = False
         self.blit_one_surface = {'surface':[], 'rects':[]}
         self.blit = {'surfaces':[self.menu, self.fona_power, self.off], 'rects':[self.menu_rect, self.fona_power_rect, self.rect]}
+
+        #Set audio mode text
+        if self.headset:
+            self.blit['surfaces'][2] = self.on
+        else:
+            self.blit['surfaces'][2] = self.off
+            
         self.next_app = None
+
+    def get_audio_mode(self):
+        audio_config = open('/home/pi/tyos/configure/audio.conf', 'r')
+        file = audio_config.readlines()
+
+        for i in range(0, len(file)):#Parse file
+            if file[i][0] == '#':
+                pass
+                #Do Nothing. Line is comment
+            else:
+                file[i] = file[i].rstrip()
+                if 'mode' in file[i]: #Extract audio mode: 1=Built in, 0=External
+                    mode = file[i]
+        
+        mode = mode.split('=')
+        self.mode = int(mode[1])
+
+        if self.mode == 1:
+            self.headset = False
+        else:
+            self.headset = True
+        
 
     def run_app(self):
         pass

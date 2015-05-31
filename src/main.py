@@ -8,18 +8,19 @@ If FONA is powered off, run sudo python /home/pi/tyos/src/main.py --power to tur
 If FONA is already on, just run sudo python /home/pi/tyos/src/main.py
 Upgrade:
 To check for updates go to https://github.com/spadgenske/TYOS/releases/latest and compare the version number with your
-current version of TYOS. If higher, you can update. To your version of TYOS run the command
+current version of TYOS. If higher, you can update. To get your version of TYOS run the command
 sudo python /home/pi/tyos/src/main.py --version
 '''
 
-VERSION = '0.3.7'
+VERSION = '0.4.9'
 
-import pygame, sys, os, time, datetime, traceback
+import pygame, sys, os, time, datetime, traceback, warnings
 from pygame.locals import *
 import framebuffer, toolbar, apps, serialport, receive
 
 class tyos():
     def __init__(self):
+        warnings.filterwarnings("ignore")
         for arg in sys.argv:
             if arg == '--power':
                 self.POWER_FONA = True
@@ -39,8 +40,8 @@ class tyos():
         #Setup fona
         self.fona = serialport.SerialPort()
         self.fona.connect()
-        #Set audio in/out to speaker and microphone
-        self.fona.transmit('AT+CHFA=1')
+
+        self.set_audio()
         
         #Setup some important objects
         self.scope = framebuffer.pyscope()
@@ -109,6 +110,36 @@ class tyos():
 
         self.blit_logo = True
         self.dead_bat = False
+
+    def set_audio(self):
+        #Set audio in/out to selected from config file
+        try: #See if config file exists
+            self.audio_file = open('/home/pi/tyos/configure/audio.conf', 'r')
+        except:
+            if not os.path.exists('/home/pi/tyos/configure'):#If configure directory doesn't exist, create one
+                os.mkdir('/home/pi/tyos/configure')
+                
+            self.audio_file = open('/home/pi/tyos/configure/audio.conf', 'w+')#Create config file and add some lines
+            self.audio_file.write('#Audio config file\n')
+            self.audio_file.write('mode=1\n')
+            self.audio_file.close()
+            self.audio_file = open('/home/pi/tyos/configure/audio.conf', 'r')
+
+        file = self.audio_file.readlines()
+
+        for i in range(0, len(file)):#Parse file
+            if file[i][0] == '#':
+                pass
+                #Do Nothing. Line is comment
+            else:
+                file[i] = file[i].rstrip()
+                if 'mode' in file[i]: #Extract audio mode: 1=Built in, 0=External
+                    mode = file[i]
+        
+        mode = mode.split('=')
+        mode = mode[1]
+            
+        self.fona.transmit('AT+CHFA=' + mode)
         
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
