@@ -2,7 +2,8 @@
 #copyright (c) 2015 Tyler Spadgenske
 #MIT License
 
-import time, os
+import time
+import os
 import pygame
 from pygame.locals import *
 
@@ -36,32 +37,18 @@ class Toolbar():
         self.last_update = time.time()
         
     def rtc(self):
+        #Get time from RTC on FONA
         self.rtc_time = self.fona.transmit('AT+CCLK?')
         self.rtc_time = self.rtc_time[1]
 
-        #Remove line feeds and echo
-        for i in self.rtc_time:
-            if i != ',':
-                self.rtc_time = self.rtc_time.replace(i, '', 1)
-            else:
-                break
+        #Parse string to include hours and seconds only
+        self.rtc_time = self.rtc_time.split(',') 
+        self.rtc_time = self.rtc_time[1]
+        self.rtc_time = self.rtc_time.split('-')
+        self.rtc_time = self.rtc_time[0]
 
-        #Flip string
-        self.rtc_time = self.rtc_time[::-1]
+        print self.rtc_time
 
-        #Extract time
-        for i in self.rtc_time:
-            if i != '-':
-                self.rtc_time = self.rtc_time.replace(i, '', 1)
-            else:
-                break
-
-        #Remove comma 
-        self.rtc_time = self.rtc_time.replace(',', '', 1)
-        self.rtc_time = self.rtc_time.replace('-', '', 1)
-
-        #Flip string
-        self.rtc_time = self.rtc_time[::-1]
         print 'RTC TIME:'
 
         #Set Overall Time
