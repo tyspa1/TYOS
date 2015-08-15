@@ -8,5 +8,9 @@ These icons were drawn by:</br>
 3. Simple Icons</br>
 4. Jardson Almeida</br>
 5. Marek Polakovic</br>
+6. icons.design</br>
+7. Michael Zenaty</br>
+8. Alexander Smith</br>
+9. Rodolfo Alvarez</br>
 
 Project Inspired by Dave Hunt's PiPhone and Adafruit's Cam Pi project.
