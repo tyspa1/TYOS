@@ -1,6 +1,6 @@
-#Call App
+#Camera App
 #copyright (c) 2015 Tyler Spadgenske
-#GPL License
+# MIT License
 ###############################
 #To be packaged with stock TYOS
 ###############################
@@ -18,7 +18,7 @@ class Run():
         self.next_app = None
 
     def run_app(self):
-        cam = Popen(['sudo', 'python', '/home/pi/adafruit-pi-cam/cam.py'])
+        cam = Popen(['sudo', 'python', '/home/pi/tyos/apps/camera/app.py'])
         pygame.quit()
         sys.exit()
         

@@ -57,3 +57,4 @@ configure/
 *.pkl
 #Error Logs
 logs/tyos.log
+apps/camera/index.dat
