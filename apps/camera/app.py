@@ -51,7 +51,7 @@ class Stream():
         #Setup buttons
         self.capture = pygame.image.load('/home/pi/tyos/apps/camera/camera.png')
         self.gallery = pygame.image.load('/home/pi/tyos/apps/camera/images/gallery.png')
-        self.settings = pygame.image.load('/home/pi/tyos/apps/camera/images/gear.png')
+        self.door = pygame.image.load('/home/pi/tyos/apps/camera/images/door.png')
         self.right = pygame.image.load('/home/pi/tyos/apps/camera/images/right.png')
         self.left = pygame.image.load('/home/pi/tyos/apps/camera/images/left.png')
         self.home = pygame.image.load('/home/pi/tyos/apps/camera/images/home.png')
@@ -95,7 +95,7 @@ class Stream():
                 #Blit buttons
                 self.screen.blit(self.capture, (125, 400))
                 self.screen.blit(self.gallery, (20, 415))
-                self.screen.blit(self.settings, (240, 410))
+                self.screen.blit(self.door, (240, 410))
 
                 if self.no_files:
                     self.screen.blit(self.no_files_image, (79, 200))
@@ -153,8 +153,15 @@ class Stream():
                                 
                         if event.pos[0] > 255:
                             if self.mode == 'capture':
-                                print 'settings'
-                                self.mode = 'settings'
+                                print 'exiting...'
+                                os.remove('/home/pi/tyos/apps/camera/index.dat')
+                                new = open('/home/pi/tyos/apps/camera/index.dat', 'w+')
+                                new.write(str(self.index))
+                                new.close()
+                                cam = Popen(['sudo', 'python', '/home/pi/tyos/src/main.py'])
+                                pygame.quit()
+                                sys.exit()
+
 
                             if self.mode == 'gallery':
                                 if self.current_image == len(self.images) - 1:
