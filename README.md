@@ -1,6 +1,6 @@
 # TYOS
-0.5.1</br>
-A mobile operating system for the tyfone.
+0.5.2</br>
+A mobile operating system for the TyTelli.
 
 copyright :copyright: 2015 Tyler Spadgenske
 
