@@ -1,7 +1,7 @@
 #Credits
 Programmed by Tyler Spadgenske
 
-Some icons and images were taken from the Noun Project (https://thenounproject.com)</br> 
+Some icons and images are based off ones from the Noun Project (https://thenounproject.com)</br> 
 These icons were drawn by:</br>
 1. Jason Grube</br>
 2. Scott Lewis</br>
