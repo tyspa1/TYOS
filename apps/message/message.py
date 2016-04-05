@@ -12,13 +12,13 @@ class Run():
     def __init__(self, fona):
         self.fona = fona
         self.next_app = None
-        
+
         #Colors
         self.WHITE = (255,255,255)
         self.BLACK = (0,0,0)
         self.send = False
         self.valid = False
-        
+
         #Variables
         self.mode = 3
         self.number = ''
@@ -27,7 +27,7 @@ class Run():
 
         self.sms_messages = {'messages':[], 'senders':[]}
         self.page = 1
-        
+
         #Load images
         self.keyboard_image = pygame.image.load('/home/pi/tyos/apps/message/keyboard.png')
         self.num_keyboard_image = pygame.image.load('/home/pi/tyos/apps/message/numbered_keyboard.png')
@@ -41,7 +41,7 @@ class Run():
         self.conversation_rect = self.conversation_image.get_rect()
         self.conversation_rect.centerx = 160
         self.conversation_rect.centery = 260
-        
+
         #Setup text
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
@@ -52,7 +52,7 @@ class Run():
         self.wait_rect = self.wait.get_rect()
         self.wait_rect.centerx = 160
         self.wait_rect.centery = 240
-        
+
         #Says... text
         self.says_text1 = self.font.render('Tyler says...', True, self.BLACK, self.WHITE)
         self.says_rect1 = self.says_text1.get_rect()
@@ -89,14 +89,14 @@ class Run():
         self.message2_line3_rect = self.message2_line3.get_rect()
         self.message2_line3_rect.x = 42
         self.message2_line3_rect.y = 316
-        
+
         #Number to send
         #Setup numbers Text
         self.number_text = self.font.render(self.number, True, self.BLACK, self.WHITE)
         self.number_rect = self.number_text.get_rect()
         self.number_rect.x = 15
         self.number_rect.y = 57
-        
+
         #Setup numbers Text
         self.line1 = self.font.render(self.message, True, self.BLACK, self.WHITE)
         self.line1_rect = self.line1.get_rect()
@@ -114,11 +114,11 @@ class Run():
         self.line3_rect = self.line3.get_rect()
         self.line3_rect.x = 15
         self.line3_rect.y = 170
-        
+
         self.bubble_rect = self.bubble.get_rect()
         self.bubble_rect.x = 5
         self.bubble_rect.y = 50
-        
+
         #Stuff to follow app protocol
         self.exit = False
         self.blit_one_surface = {'surface':[], 'rects':[]}
@@ -158,18 +158,18 @@ class Run():
 
         self.contact_list = contact_file.readlines()
         contact_file.close()
-                                
+
         for i in range(0, len(self.contact_list)):
             if self.contact_list[i][0] == '#':
                 pass
                 #Do Nothing. Line is comment
             else:
-                self.contact_list[i] = self.contact_list[i].rstrip().split('=')                
+                self.contact_list[i] = self.contact_list[i].rstrip().split('=')
 
     def on_first_run(self):
         self.first = False
         self.mode = 3
-        
+
     def get_sms(self):
         #Set to text mode
         self.fona.transmit('AT+CMGF=1')
@@ -193,7 +193,7 @@ class Run():
                 if i[1] == senders:
                     self.sms_messages['senders'][index] = i[0]
                 index += 1
-                    
+
         #If there are less than two messages, do some configuring
         if int(num_sms) < 2:
             self.sms_messages['senders'].append('')
@@ -201,11 +201,11 @@ class Run():
             if int(num_sms) == 0:
                 self.sms_messages['senders'].append('')
                 self.sms_messages['messages'].append('')
-                
+
     def config_sms(self):
         self.blit['surfaces'][1] = self.font.render(self.sms_messages['senders'][(self.page + 1) * -1] + ' says...', True, self.BLACK, self.WHITE)
         self.blit['surfaces'][2] = self.font.render(self.sms_messages['senders'][self.page * -1] + ' says...', True, self.BLACK, self.WHITE)
-        #Box 1 
+        #Box 1
         self.blit['surfaces'][3] = self.font.render(self.sms_messages['messages'][(self.page + 1) * -1][:25], True, self.BLACK, self.WHITE)
         if len(self.sms_messages['messages'][(self.page + 1) * -1]) > 25:
             self.blit['surfaces'][4] = self.font.render(self.sms_messages['messages'][(self.page + 1)* -1][25:50], True, self.BLACK, self.WHITE)
@@ -216,8 +216,8 @@ class Run():
         else:
             self.blit['surfaces'][4] = self.font.render('', True, self.BLACK, self.WHITE)
             self.blit['surfaces'][5] = self.font.render('', True, self.BLACK, self.WHITE)
-            
-        #Box 2 
+
+        #Box 2
         self.blit['surfaces'][6] = self.font.render(self.sms_messages['messages'][self.page * -1][:25], True, self.BLACK, self.WHITE)
         if len(self.sms_messages['messages'][self.page * -1]) > 25:
             self.blit['surfaces'][7] = self.font.render(self.sms_messages['messages'][self.page * -1][25:50], True, self.BLACK, self.WHITE)
@@ -228,7 +228,7 @@ class Run():
         else:
             self.blit['surfaces'][7] = self.font.render('', True, self.BLACK, self.WHITE)
             self.blit['surfaces'][8] = self.font.render('', True, self.BLACK, self.WHITE)
-            
+
     def run_app(self):
         if self.mode == 3:
             self.blit = self.blit_mode3
@@ -240,10 +240,10 @@ class Run():
                 self.get_sms()
                 self.config_sms()
             self.first = True
-                
+
         if self.exit:
             self.mode = 2
-        if len(self.number) == 10:
+        if len(self.number) > 0:
             self.valid = True
         else:
             self.valid = False
@@ -274,7 +274,7 @@ class Run():
                 if self.page == len(self.sms_messages['senders']):
                     self.page = len(self.sms_messages['senders']) - 1
                 self.config_sms()
-                
+
             if event.pos[1] > 352 and event.pos[1] < 403:
                 self.page -= 1
                 if self.page == 0:
@@ -283,7 +283,7 @@ class Run():
             if event.pos[1] > 410 and event.pos[1] < 455:
                 self.mode = 0
                 self.blit = self.blit_mode1
-            
+
     def get_keyboard_events(self, event):
         #Get key pressed
         #Row 1
@@ -338,7 +338,7 @@ class Run():
                     self.message = self.message + 'p'
                 else:
                     self.number = self.number + '0'
-        #Row 2  
+        #Row 2
         if event.pos[1] > 336 and event.pos[1] < 376:
             if event.pos[0] > 18 and event.pos[0] < 43:
                 if self.mode == 1:
@@ -408,7 +408,7 @@ class Run():
             self.mode = 0
         if event.pos[0] > 5 and event.pos[0] < 318 and event.pos[1] > 88 and event.pos[1] < 218:
             self.mode = 1
-            
+
         if self.mode == 0:
             self.blit['surfaces'][0] = self.num_keyboard_image
         else:

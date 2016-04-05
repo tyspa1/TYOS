@@ -25,14 +25,14 @@ class Run():
         self.call_image = pygame.image.load('/home/pi/tyos/apps/call/call.png')
         self.back_image = pygame.image.load('/home/pi/tyos/apps/call/back.png')
         self.hangup_image = pygame.image.load('/home/pi/tyos/apps/call/hangup.png')
-        
+
         self.numbers = {'surfaces':[], 'rects':[]}
 
         #Setup colors
         self.RED = (170,0,0)
         self.WHITE = (255,255,255)
         self.BLACK = (0,0,0)
-        
+
         #Setup fonts
         self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 48)
 
@@ -42,7 +42,7 @@ class Run():
 
         self.call_number_text = self.font.render(self.call_number, True, self.BLACK, self.WHITE)
         self.call_number_rect = self.call_number_text.get_rect()
-        
+
         num = 0
         x = 35
         y = 120
@@ -89,7 +89,7 @@ class Run():
         self.numbers['rects'].append(self.call_number_rect)
         self.numbers['rects'][-1].x = 30
         self.numbers['rects'][-1].centery = 65
-        
+
         self.blit_one_surface = {'surface':self.circle_image, 'rects':self.circles}
         self.blit = self.numbers
 
@@ -104,7 +104,7 @@ class Run():
                     self.call_number = self.call_number + '7'
                 if event.pos[1] > 390 and event.pos[1] < 460:
                     self.call_number = self.call_number + '0'
-                
+
             if event.pos[0] > 140 and event.pos[0] < 210:
                 if event.pos[1] > 120 and event.pos[1] < 190:
                     self.call_number = self.call_number + '2'
@@ -125,7 +125,7 @@ class Run():
                         self.exit = True
                     else:
                         self.call_number = self.call_number[:-1]
-                        
+
         if event.pos[0] > 140 and event.pos[0] < 210:
             if event.pos[1] > 390 and event.pos[1] < 460:
                 self.call += 1
@@ -135,13 +135,11 @@ class Run():
 
     def call_person(self):
         if self.call == 1:
-            if len(self.call_number) == 10:
-                self.valid_call = True
-            elif len(self.call_number) == 11 and self.call_number[0] == '1': #Long distance
+            if len(self.call_number) > 0:
                 self.valid_call = True
             else:
                 self.valid_call = False
-                
+
             if self.valid_call:
                 self.numbers['surfaces'][-3] = self.hangup_image
                 self.ongoing_call = True
@@ -149,7 +147,7 @@ class Run():
                 if self.first_call:
                     self.fona.transmit('ATD' + self.call_number + ';') #Make call
                     self.first_call = False
-                
+
             else:
                 print 'Invalid Number'
                 self.call = 0
@@ -160,7 +158,7 @@ class Run():
                 self.numbers['surfaces'][-3] = self.call_image
                 self.exit = True
                 self.first_call = True
-    
+
     def run_app(self):
         self.call_person()
 
