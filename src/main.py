@@ -11,8 +11,10 @@ To check for updates go to https://github.com/spadgenske/TYOS/releases/latest an
 current version of TYOS. If higher, you can update. To get your version of TYOS run the command
 sudo python /home/pi/tyos/src/main.py --version
 '''
+VERSION = '0.5.4'
 
-VERSION = '0.5.2'
+#Set to True if you do not want the time modified off the FONA
+USE_RAW_TIME = False
 
 import pygame, sys, os, time, datetime, traceback, warnings
 from pygame.locals import *
@@ -30,7 +32,7 @@ class tyos():
             if arg == '--version':
                 print 'TYOS VERSION ' + VERSION
                 sys.exit()
-            
+
         self.VERSION = VERSION
         if self.POWER_FONA:
             import power
@@ -42,7 +44,7 @@ class tyos():
         self.fona.connect()
 
         self.set_audio()
-        
+
         #Setup some important objects
         self.scope = framebuffer.pyscope()
         self.toolbar = toolbar.Toolbar(self.fona)
@@ -118,7 +120,7 @@ class tyos():
         except:
             if not os.path.exists('/home/pi/tyos/configure'):#If configure directory doesn't exist, create one
                 os.mkdir('/home/pi/tyos/configure')
-                
+
             self.audio_file = open('/home/pi/tyos/configure/audio.conf', 'w+')#Create config file and add some lines
             self.audio_file.write('#Audio config file\n')
             self.audio_file.write('mode=1\n')
@@ -135,23 +137,25 @@ class tyos():
                 file[i] = file[i].rstrip()
                 if 'mode' in file[i]: #Extract audio mode: 1=Built in, 0=External
                     mode = file[i]
-        
+
         mode = mode.split('=')
         mode = mode[1]
-            
+
         self.fona.transmit('AT+CHFA=' + mode)
-        
+
     def blit_time(self):
         #Convert to 12 hour time then blit it to surface
         t = time.strftime("%H:%M")
-        if int(t[0] + t[1]) > 12:
-            t = str(int(t[0] + t[1]) - 12) + t[-3:]
+
+        if USE_RAW_TIME == False:
+            if int(t[0] + t[1]) > 12:
+                t = str(int(t[0] + t[1]) - 12) + t[-3:]
 
         t = t.lstrip('0')
-            
+
         self.clock_text = self.font.render(t, True, self.WHITE, self.BLACK)
         self.surface.blit(self.clock_text, self.images['rects'][1])
-        
+
     def home(self):
         while True:
             #handle events and clock
@@ -175,12 +179,12 @@ class tyos():
             if self.reciever.call_coming:
                 self.apps.app_to_open = None
                 self.apps.blit_logo = True
-            
+
             #Update if necessary
             if self.update:
                 self.blit(self.images, self.rectangles, self.reception_bars, self.bat_left)
                 self.update = False
-                    
+
     def blit(self, surfaces, rects, reception, bat):
         self.surface.fill(self.WHITE)
 
@@ -193,7 +197,7 @@ class tyos():
             for rect, surface in zip(self.apps.app_objects[self.apps.app_to_open].blit['rects'],
                                         self.apps.app_objects[self.apps.app_to_open].blit['surfaces']):
                 self.surface.blit(surface, rect)
-                
+
         #Blit all rectangles
         for rect, color in zip(rects['rects'], rects['colors']):
             pygame.draw.rect(self.surface, color, rect)
@@ -208,7 +212,7 @@ class tyos():
 
         #Blit battery Percentage
         self.surface.blit(bat['surface'], bat['rects'])
-        
+
         #Blit logo
         if self.apps.blit_logo:
             self.surface.blit(self.logo, self.logo_rect)
@@ -231,11 +235,11 @@ class tyos():
             self.app_bar = self.apps.check(event)
             if self.reciever.call_coming:
                 self.reciever.get_events(event)
-                
+
 phone = tyos()
 try:
     phone.home() #E.T Reference
-    
+
 except KeyboardInterrupt:
     print
     print 'Closing TYOS ' + phone.VERSION
