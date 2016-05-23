@@ -19,14 +19,14 @@ class Stream():
         self.no_files = False
         #Get current photo name index
         try:
-            index_file = open('/home/pi/tyos/apps/camera/index.dat', 'r')
+            index_file = open('/home/pi/index.dat', 'r')
         except:
             #Create new file if needed
-            index_file = open('/home/pi/tyos/apps/camera/index.dat', 'w+')
+            index_file = open('/home/pi/index.dat', 'w+')
             index_file.write('0')
             index_file.close()
-            index_file = open('/home/pi/tyos/apps/camera/index.dat')
-            print 'NO INDEX FILE. CREATED /home/pi/tyos/apps/camera/index.dat'
+            index_file = open('/home/pi/index.dat')
+            print 'NO INDEX FILE. CREATED /home/pi/index.dat'
         self.index = int(index_file.readline())
         index_file.close()
         
@@ -154,8 +154,8 @@ class Stream():
                         if event.pos[0] > 255:
                             if self.mode == 'capture':
                                 print 'exiting...'
-                                os.remove('/home/pi/tyos/apps/camera/index.dat')
-                                new = open('/home/pi/tyos/apps/camera/index.dat', 'w+')
+                                os.remove('/home/pi/index.dat')
+                                new = open('/home/pi/index.dat', 'w+')
                                 new.write(str(self.index))
                                 new.close()
                                 cam = Popen(['sudo', 'python', '/home/pi/tyos/src/main.py'])

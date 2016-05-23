@@ -11,7 +11,7 @@ To check for updates go to https://github.com/spadgenske/TYOS/releases/latest an
 current version of TYOS. If higher, you can update. To get your version of TYOS run the command
 sudo python /home/pi/tyos/src/main.py --version
 '''
-VERSION = '0.5.4'
+VERSION = '0.5.6'
 
 #Set to True if you do not want the time modified off the FONA
 USE_RAW_TIME = False

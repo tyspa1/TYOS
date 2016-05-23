@@ -1,5 +1,5 @@
 # TYOS
-0.5.2</br>
+0.5.6</br>
 A mobile operating system for the TyTelli.
 
 copyright :copyright: 2015 Tyler Spadgenske
