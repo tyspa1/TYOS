@@ -36,7 +36,7 @@ class Receive():
         self.call_rect.x = 125
 
         #Setup fonts
-        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 24)
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 24)
 
         #Setup numbers Text
         self.incoming = self.font.render('Incoming Call...', True, self.BLACK, self.WHITE)
