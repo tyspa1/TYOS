@@ -99,7 +99,7 @@ class tyos():
         self.bat_left = {'surface':self.toolbar.bat_left, 'rects':self.toolbar.bat_left_rect}
 
         #Setup fonts
-        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 20)
 
         #Setup clock Text
         self.clock_text = self.font.render('12:00', True, self.WHITE, self.BLACK)
