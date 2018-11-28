@@ -34,7 +34,7 @@ class Run():
         self.BLACK = (0,0,0)
 
         #Setup fonts
-        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 48)
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 48)
 
         #Setup numbers Text
         self.number = self.font.render('1', True, self.RED, self.WHITE)
