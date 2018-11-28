@@ -22,7 +22,7 @@ class Run():
         self.menu = pygame.image.load('/home/pi/tyos/apps/settings/menu.png')
         self.menu_rect = self.menu.get_rect()
 
-        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 32)
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 32)
 
         self.off = self.font.render('OFF', True, self.RED, self.WHITE)
         # fona power Text
