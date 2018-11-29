@@ -22,7 +22,7 @@ class Toolbar():
         self.dead_bat = False
 
         #Setup fonts
-        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 14)
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 14)
         
         #Setup Battery Persentage Text
         self.bat_left = self.font.render('..%', True, self.BLACK, self.WHITE)

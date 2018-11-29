@@ -44,8 +44,8 @@ class Run():
 
         #Setup text
         #Setup fonts
-        self.font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 20)
-        self.message_font = pygame.font.Font('/home/pi/tyos/fonts/arial.ttf', 12)
+        self.font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 20)
+        self.message_font = pygame.font.Font('/home/pi/tyos/fonts/liberation_sans.ttf', 12)
 
         #please wait Text
         self.wait = self.font.render('Please wait...', True, self.BLACK, self.WHITE)
